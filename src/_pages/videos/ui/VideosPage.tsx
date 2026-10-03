@@ -1,8 +1,17 @@
+import Image from 'next/image'
 import { Play } from 'lucide-react'
 import { getVideos } from '@/shared/api'
 import { routes } from '@/shared/config'
-import { unsplashUrl } from '@/shared/lib'
+import { pageMetadata, unsplashSrc } from '@/shared/lib'
 import { Breadcrumb, font } from '@/shared/ui'
+
+export const metadata = pageMetadata({
+  title: 'Videos de la Sabana de Bogotá',
+  description: 'Conoce en video la Catedral de Sal, la Laguna de Neusa, las Lagunas de Siecha y otros destinos de la Sabana de Bogotá.',
+  path: routes.videos,
+  imageId: '1724027212141-7244bc12678a',
+  imageAlt: 'Catedral de Sal de Zipaquirá',
+})
 
 export function VideosPage() {
   const videos = getVideos()
@@ -23,9 +32,14 @@ export function VideosPage() {
         <div style={{ marginBottom: '40px' }}>
           <div style={{ fontFamily: font.jost, fontSize: '12px', fontWeight: 600, color: '#007934', letterSpacing: '0.12em', marginBottom: '12px' }}>DESTACADO</div>
           <div style={{ position: 'relative', borderRadius: '12px', overflow: 'hidden', backgroundColor: '#233530' }}>
-            <img
-              src={unsplashUrl(featured.img, 1200, 500)}
+            <Image
+              src={unsplashSrc(featured.img)}
               alt={featured.title}
+              width={1232}
+              height={420}
+              sizes="(min-width: 1280px) 1232px, 100vw"
+              loading="eager"
+              fetchPriority="high"
               style={{ width: '100%', height: '420px', objectFit: 'cover', opacity: 0.65, display: 'block' }}
             />
             <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -46,7 +60,7 @@ export function VideosPage() {
           {videos.slice(1).map(video => (
             <div key={video.title} style={{ border: '1px solid #E5E5E5', borderRadius: '10px', overflow: 'hidden', cursor: 'pointer', backgroundColor: 'white' }}>
               <div style={{ position: 'relative', backgroundColor: '#233530' }}>
-                <img src={unsplashUrl(video.img, 500, 250)} alt={video.title} style={{ width: '100%', height: '170px', objectFit: 'cover', opacity: 0.75, display: 'block' }} />
+                <Image src={unsplashSrc(video.img)} alt={video.title} width={400} height={170} sizes="(min-width: 1280px) 400px, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" style={{ width: '100%', height: '170px', objectFit: 'cover', opacity: 0.75, display: 'block' }} />
                 <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <div style={{ width: '44px', height: '44px', borderRadius: '50%', backgroundColor: 'rgba(0,121,52,0.88)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <Play size={16} fill="white" color="white" strokeWidth={0} style={{ marginLeft: '2px' }} />

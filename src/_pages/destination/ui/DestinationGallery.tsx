@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { unsplashUrl } from '@/shared/lib'
+import Image from 'next/image'
+import { unsplashSrc } from '@/shared/lib'
 import { font } from '@/shared/ui'
 import styles from './destination-gallery.module.css'
 
@@ -19,10 +20,12 @@ export function DestinationGallery({ name, images }: { name: string; images: str
             aria-label={`Ampliar fotografía ${i + 1} de ${name}`}
             style={{ position: 'relative', borderRadius: '8px', overflow: 'hidden', aspectRatio: '4/3', backgroundColor: '#e8f0e8' }}
           >
-            <img
-              src={unsplashUrl(imgId, 400, 280)}
+            <Image
+              src={unsplashSrc(imgId)}
               alt={`Fotografía ${i + 1} de ${name}`}
-              style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.2s' }}
+              fill
+              sizes="(min-width: 1280px) 260px, (min-width: 768px) 22vw, 33vw"
+              style={{ objectFit: 'cover', transition: 'transform 0.2s' }}
             />
             <div className={styles.overlay} style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="white" style={{ opacity: 0 }} aria-hidden="true">
@@ -52,10 +55,13 @@ export function DestinationGallery({ name, images }: { name: string; images: str
             style={{ position: 'absolute', left: '20px', color: 'white', fontSize: '32px', background: 'none' }}
             onClick={e => { e.stopPropagation(); setLightboxIndex((lightboxIndex - 1 + images.length) % images.length) }}
           >‹</button>
-          <img
-            src={unsplashUrl(images[lightboxIndex], 1200, 800)}
+          <Image
+            src={unsplashSrc(images[lightboxIndex])}
             alt={`Fotografía ${lightboxIndex + 1}`}
-            style={{ maxWidth: '90vw', maxHeight: '85vh', objectFit: 'contain', borderRadius: '4px' }}
+            width={1200}
+            height={800}
+            sizes="90vw"
+            style={{ maxWidth: '90vw', maxHeight: '85vh', width: 'auto', height: 'auto', objectFit: 'contain', borderRadius: '4px' }}
             onClick={e => e.stopPropagation()}
           />
           <button

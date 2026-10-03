@@ -1,6 +1,13 @@
 import { getSecurityTips } from '@/shared/api'
 import { routes } from '@/shared/config'
+import { pageMetadata } from '@/shared/lib'
 import { Breadcrumb, font, PoliceShield } from '@/shared/ui'
+
+export const metadata = pageMetadata({
+  title: 'Viaja seguro: recomendaciones de la Policía Nacional',
+  description: 'Consejos de la Policía Nacional para visitar la Sabana de Bogotá de forma segura: pertenencias, seguridad digital, transporte y números de emergencia.',
+  path: routes.security,
+})
 
 const emergencyNumbers = [
   { number: '123', label: 'Policía Nacional' },

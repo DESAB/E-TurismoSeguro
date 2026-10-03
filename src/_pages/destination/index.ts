@@ -1,1 +1,1 @@
-export { DestinationPage, generateStaticParams } from './ui/DestinationPage'
+export { DestinationPage, generateMetadata, generateStaticParams } from './ui/DestinationPage'

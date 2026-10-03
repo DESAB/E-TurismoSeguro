@@ -2,7 +2,11 @@ import type { NextConfig } from "next";
 import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  images: {
+    // Sin `sharp` en Workers: el loader delega el redimensionado al origen (CDN de Unsplash, etc.).
+    loader: "custom",
+    loaderFile: "./src/shared/lib/image-loader.ts",
+  },
 };
 
 export default nextConfig;

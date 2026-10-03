@@ -36,8 +36,9 @@ app/                      ← rutas de Next, SOLO re-exportan (layout.tsx, icon.
 src/_app/                 ← capa app: styles/ (globals.css, fonts.ts), layout/ (SiteLayout, Header, Footer)
 src/_pages/<slice>/       ← home, explore, map, destination, security, videos, contact, admin (ui/, model/)
 src/entities/destination/ ← DestinationCard, CategoryBadge (usados en varias páginas)
-src/shared/               ← api/ (datos locales → Supabase), config/ (routes), lib/ (unsplash, slugify),
-                            ui/ (font, PoliceShield, Breadcrumb)
+src/_app/seo/             ← sitemap.ts y robots.ts (app/sitemap.ts y app/robots.ts los re-exportan)
+src/shared/               ← api/ (datos locales → Supabase), config/ (routes, site), lib/ (unsplash, slugify,
+                            seo → pageMetadata, image-loader), ui/ (font, PoliceShield, Breadcrumb, JsonLd)
 ```
 - Las carpetas FSD llevan `_` (`_app`, `_pages`) para no chocar con `app/` y `pages/` de Next.
 - Opciones de segmento de Next (`dynamicParams`, `revalidate`…) van **en el archivo de `app/`**: Next las
@@ -59,11 +60,11 @@ src/shared/               ← api/ (datos locales → Supabase), config/ (routes
 
 ## Plan y estado
 
-### ✅ Fase 1 — Base del proyecto (hecha, sin commit)
+### ✅ Fase 1 — Base del proyecto (hecha)
 Next 16.3.8, OpenNext 1.20.8, wrangler 4.147.0, lucide-react, fuentes Jost y Barlow Condensed, paleta
 `brand-*` en Tailwind. Build de OpenNext y `wrangler dev` verificados en local (home 200, 404 correcto).
 
-### ✅ Fase 2 — Réplica del prototipo con rutas reales (hecha, sin commit)
+### ✅ Fase 2 — Réplica del prototipo con rutas reales (hecha)
 | Prototipo (`Page`) | Ruta |
 |---|---|
 | `home` | `/` |
@@ -92,17 +93,30 @@ Diferencias deliberadas con el prototipo (aprobadas):
 
 Cualquier **otro** problema de diseño o responsive: **no tocarlo**. El usuario quiere revisarlo aparte, después.
 
-### ⏳ Fase 3 — SEO
-`metadata` por página (título, descripción, Open Graph), `sitemap.ts`, `robots.ts`, JSON-LD
-`TouristAttraction` por destino, revisar los `alt` de las imágenes. Ya están: `lang="es-CO"` y `generateStaticParams`.
-Antes de escribir código, leer las guías en `node_modules/next/dist/docs/`
-(p. ej. `01-app/02-guides/json-ld.md` y `01-app/01-getting-started/14-metadata-and-og-images.md`).
+### ✅ Fase 3 — SEO e imágenes (hecha, sin commit)
+- **Metadata:** título con plantilla `%s · E-TurismoSeguro` (el inicio usa `title.absolute`), descripción,
+  canonical, Open Graph y Twitter por página con `pageMetadata()` de `@/shared/lib`. Cada slice de `_pages`
+  exporta `metadata` (o `generateMetadata` en destino) y la ruta de `app/` lo re-exporta.
+  `/explorar` tiene canonical sin filtros. `/admin` es `noindex, nofollow`.
+- **JSON-LD:** `WebSite` en el inicio; `TouristAttraction` + `BreadcrumbList` en cada destino (`<JsonLd>` escapa `<`).
+- **`/sitemap.xml` y `/robots.txt`** (robots bloquea `/admin`).
+- **Imágenes:** `next/image` con loader propio (`src/shared/lib/image-loader.ts`, `images.loaderFile` en
+  `next.config.ts`): Unsplash redimensiona con `?w=&auto=format`, sin `sharp` ni Cloudflare Images. Las fotos usan
+  `unsplashSrc(id)` + `fill`/`sizes`; los héroes llevan `loading="eager"` + `fetchPriority="high"` (en Next 16
+  `priority` está obsoleto). Solo el admin conserva `<img>` (vistas previas de IDs escritos a mano; eslint-disable en ese archivo).
+- Verificado: build, lint, typecheck; misma altura que el prototipo en todas las páginas (las fotos ahora se ven
+  algo más nítidas por el srcset); y en Workers (OpenNext + populateCache + wrangler dev) rutas, sitemap, robots y flujos OK.
+
+**Pendiente al desplegar:** definir `NEXT_PUBLIC_SITE_URL` (dominio público, sin barra final) como variable de
+**build** en Cloudflare. Sin ella, canonical, Open Graph, sitemap y robots apuntan a `http://localhost:3000`.
+Después: dar de alta el sitio en Google Search Console y enviar el sitemap.
 
 ### ⏳ Fase 4 — Despliegue
 1. Crear el repo en GitHub (sugerido `MateoLLanosT/E-TurismoSeguro`; **preguntar** si privado o público).
 2. Conectarlo en Cloudflare → Workers & Pages → Import repository. Build command: `npx opennextjs-cloudflare build`.
    Deploy command: `npx opennextjs-cloudflare deploy`. Si hace falta, variable `NODE_VERSION=22`.
-3. El usuario aún **no ha hecho login** en Cloudflare ni dado un account ID. Nada se ha desplegado.
+3. Variable de build `NEXT_PUBLIC_SITE_URL` con el dominio público (ver Fase 3).
+4. El usuario aún **no ha hecho login** en Cloudflare ni dado un account ID. Nada se ha desplegado.
 
 ### ⏳ Fase 5 — Supabase (después)
 Tablas (destinos, videos, municipios, galería), RLS, Storage para imágenes, Auth para `/admin`.
@@ -110,15 +124,17 @@ Sustituir el cuerpo de los getters de `src/shared/api/`. Cambiar la caché incre
 
 ## Pendientes conocidos
 
-- **Git:** solo existe el commit inicial de create-next-app. Los cambios de las Fases 1 y 2 **no tienen commit**
-  y no hay remoto. Hacer commit o push **solo cuando el usuario lo pida**.
+- **Git:** Fases 1 y 2 en el commit `2726378` (rama `main`). **No hacer commits ni push:** el usuario crea el repo
+  en GitHub y hace los commits a mano. Dejar los cambios sin commit y avisarle qué quedó pendiente.
 - **Caché incremental:** `staticAssetsIncrementalCache` (solo lectura, sirve lo pre-renderizado). Hay que
   **poblarla** después del build (`populateCache`; `preview` y `deploy` lo hacen solos). Sin poblarla, las páginas
   de `/destinos/[slug]` dan 404 (`NoFallbackError`) y cada request deja `ERROR ... Failed to set to read-only cache`.
   Pasar a `r2IncrementalCache` cuando haya revalidación (ISR) con Supabase.
-- **Imágenes:** se usa `<img>` (regla `@next/next/no-img-element` desactivada en `eslint.config.mjs`).
-  `next/image` no tiene `sharp`: decidir entre el binding `IMAGES` de Cloudflare Images o `images.unoptimized`.
-  Las fotos de Unsplash son temporales: reemplazarlas por fotos propias cuando el usuario las tenga.
+- **Imágenes:** las fotos de Unsplash son temporales. Con fotos propias (Supabase Storage) hay que añadir su rama
+  en `image-loader.ts` (transformaciones de Supabase o Cloudflare Images).
+- **Componentes:** hechos a mano (réplica del prototipo). Plan acordado: usar **shadcn/ui** (en `src/shared/ui`,
+  con el estilo del prototipo) para el admin real en la Fase 5; las páginas públicas se quedan como están.
+- **Estilos inline** copiados del prototipo: funcionan, pero cuestan de mantener. Migrarlos a Tailwind es una mejora aparte.
 - **Revisión de diseño y responsive** del prototipo: pendiente, el usuario quiere hacerla aparte.
   Ejemplo conocido: en móvil el Mapa mantiene la barra lateral de 280 px (igual que el prototipo).
 

@@ -1,1 +1,1 @@
-export { SecurityPage } from './ui/SecurityPage'
+export { SecurityPage, metadata } from './ui/SecurityPage'

@@ -1,12 +1,13 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { MapPin } from 'lucide-react'
 import { CategoryBadge } from '@/entities/destination'
 import type { Destination } from '@/shared/api'
 import { routes } from '@/shared/config'
-import { unsplashUrl } from '@/shared/lib'
+import { unsplashSrc } from '@/shared/lib'
 import { font } from '@/shared/ui'
 
 const municipalityColors: Record<string, string> = {
@@ -81,7 +82,7 @@ export function MapView({ destinations, municipalities }: { destinations: Destin
         </div>
         {selectedDest && (
           <div style={{ borderTop: '1px solid #E5E5E5', padding: '16px', backgroundColor: 'white' }}>
-            <img src={unsplashUrl(selectedDest.imageId, 280, 140)} alt={selectedDest.name} style={{ width: '100%', height: '120px', objectFit: 'cover', borderRadius: '6px', marginBottom: '10px' }} />
+            <Image src={unsplashSrc(selectedDest.imageId)} alt={selectedDest.name} width={248} height={120} sizes="248px" style={{ width: '100%', height: '120px', objectFit: 'cover', borderRadius: '6px', marginBottom: '10px' }} />
             <CategoryBadge category={selectedDest.category} />
             <h4 style={{ fontFamily: font.barlow, fontWeight: 600, fontSize: '18px', color: '#233530', margin: '6px 0 4px' }}>{selectedDest.name}</h4>
             <p style={{ fontFamily: font.jost, fontSize: '12px', color: '#76777A', marginBottom: '10px' }}>{selectedDest.municipality}</p>
@@ -98,10 +99,13 @@ export function MapView({ destinations, municipalities }: { destinations: Destin
 
       {/* Map */}
       <div style={{ flex: 1, position: 'relative', backgroundColor: '#e8f0e8', overflow: 'hidden' }}>
-        <img
-          src={unsplashUrl('1487203007409-91f19b5b4f62', 1200, 700)}
+        <Image
+          src={unsplashSrc('1487203007409-91f19b5b4f62')}
           alt="Vista aérea Sabana de Bogotá"
-          style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.35 }}
+          fill
+          sizes="(min-width: 768px) calc(100vw - 280px), 100vw"
+          loading="eager"
+          style={{ objectFit: 'cover', opacity: 0.35 }}
         />
         <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(232,240,232,0.4)' }} />
 

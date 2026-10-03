@@ -1,12 +1,15 @@
 'use client'
+/* eslint-disable @next/next/no-img-element -- Vistas previas de IDs de Unsplash que escribe el
+   administrador: se muestran tal cual con <img>. La página /admin no se indexa. */
 
 import { useState, type CSSProperties } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { Play, Search } from 'lucide-react'
 import { CATEGORIES, type Destination, type Video } from '@/shared/api'
 import { routes } from '@/shared/config'
 import { slugify } from '@/shared/lib'
-import { font, policeShieldSrc } from '@/shared/ui'
+import { font, policeShieldImage } from '@/shared/ui'
 
 // Panel de administración (réplica del prototipo). Por ahora los cambios viven solo en memoria del
 // navegador: se pierden al recargar. Fase 5: guardar en Supabase y proteger con login.
@@ -127,7 +130,7 @@ export function AdminPage({
       {/* ── Top bar ── */}
       <div style={{ backgroundColor: '#233530', borderBottom: '1px solid rgba(0,0,0,0.12)', padding: '0 24px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0, position: 'sticky', top: 0, zIndex: 50 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-          <img src={policeShieldSrc} alt="Policía Nacional" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
+          <Image src={policeShieldImage} alt="Policía Nacional" width={32} height={32} style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
           <div>
             <span style={{ fontFamily: font.barlow, fontWeight: 700, fontSize: '16px', color: '#C2D500', letterSpacing: '0.04em' }}>E-TurismoSeguro</span>
             <span style={{ fontFamily: font.jost, fontSize: '11px', color: 'rgba(255,255,255,0.45)', marginLeft: '10px' }}>Panel de administración</span>

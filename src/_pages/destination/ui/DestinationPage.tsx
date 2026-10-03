@@ -1,18 +1,68 @@
+import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { Clock, ExternalLink, Info, MapPin } from 'lucide-react'
 import { CategoryBadge, DestinationCard } from '@/entities/destination'
-import { getDestinationBySlug, getDestinations } from '@/shared/api'
-import { routes } from '@/shared/config'
-import { unsplashUrl } from '@/shared/lib'
-import { Breadcrumb, font, PoliceShield } from '@/shared/ui'
+import type { Metadata } from 'next'
+import { getDestinationBySlug, getDestinations, type Destination } from '@/shared/api'
+import { routes, site } from '@/shared/config'
+import { pageMetadata, unsplashSrc, unsplashUrl } from '@/shared/lib'
+import { Breadcrumb, font, JsonLd, PoliceShield } from '@/shared/ui'
 import { DestinationGallery } from './DestinationGallery'
+
+type DestinationParams = { params: Promise<{ slug: string }> }
 
 /** Pre-renderiza una página por destino en el build. */
 export function generateStaticParams() {
   return getDestinations().map(d => ({ slug: d.slug }))
 }
 
-export async function DestinationPage({ params }: { params: Promise<{ slug: string }> }) {
+export async function generateMetadata({ params }: DestinationParams): Promise<Metadata> {
+  const dest = getDestinationBySlug((await params).slug)
+  if (!dest) return {}
+  return pageMetadata({
+    // "Catedral de Sal en Zipaquirá", pero no "Parque y Templo de Chía en Chía"
+    title: dest.name.includes(dest.municipality) ? dest.name : `${dest.name} en ${dest.municipality}`,
+    description: dest.description,
+    path: routes.destination(dest.slug),
+    imageId: dest.imageId,
+    imageAlt: dest.name,
+  })
+}
+
+/** Datos estructurados para Google: el lugar turístico y su ruta de navegación. */
+function destinationJsonLd(dest: Destination) {
+  const url = `${site.url}${routes.destination(dest.slug)}`
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'TouristAttraction',
+        '@id': url,
+        name: dest.name,
+        description: dest.longDescription,
+        url,
+        image: dest.images.map(id => unsplashUrl(id, 1200, 800)),
+        address: {
+          '@type': 'PostalAddress',
+          streetAddress: dest.address,
+          addressLocality: dest.municipality,
+          addressRegion: 'Cundinamarca',
+          addressCountry: 'CO',
+        },
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Inicio', item: `${site.url}${routes.home}` },
+          { '@type': 'ListItem', position: 2, name: 'Explorar', item: `${site.url}${routes.explore}` },
+          { '@type': 'ListItem', position: 3, name: dest.name, item: url },
+        ],
+      },
+    ],
+  }
+}
+
+export async function DestinationPage({ params }: DestinationParams) {
   const { slug } = await params
   const dest = getDestinationBySlug(slug)
   if (!dest) notFound()
@@ -21,12 +71,17 @@ export async function DestinationPage({ params }: { params: Promise<{ slug: stri
 
   return (
     <div style={{ paddingTop: '64px' }}>
+      <JsonLd data={destinationJsonLd(dest)} />
       {/* Hero */}
       <div style={{ position: 'relative', height: '420px', backgroundColor: '#233530', overflow: 'hidden' }}>
-        <img
-          src={unsplashUrl(dest.imageId, 1440, 500)}
+        <Image
+          src={unsplashSrc(dest.imageId)}
           alt={dest.name}
-          style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.65 }}
+          fill
+          sizes="100vw"
+          loading="eager"
+          fetchPriority="high"
+          style={{ objectFit: 'cover', opacity: 0.65 }}
         />
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,41,20,0.85) 0%, rgba(0,0,0,0.2) 60%, transparent 100%)' }} />
         <div style={{ position: 'absolute', bottom: '40px', left: '0', right: '0' }}>

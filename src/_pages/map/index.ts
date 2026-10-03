@@ -1,1 +1,1 @@
-export { MapPage } from './ui/MapPage'
+export { MapPage, metadata } from './ui/MapPage'

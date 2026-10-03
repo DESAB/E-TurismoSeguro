@@ -1,1 +1,1 @@
-export { ContactPage as default } from '@/_pages/contact'
+export { ContactPage as default, metadata } from '@/_pages/contact'

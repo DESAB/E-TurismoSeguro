@@ -1,9 +1,10 @@
+import Image from 'next/image'
 import logo from './logo-etourismo.png'
 
 export function PoliceShield({ size = 40 }: { size?: number }) {
   return (
-    <img
-      src={logo.src}
+    <Image
+      src={logo}
       alt="Escudo Policía Nacional de Colombia"
       width={size}
       height={size}
@@ -12,5 +13,5 @@ export function PoliceShield({ size = 40 }: { size?: number }) {
   )
 }
 
-/** Ruta del escudo para usos sin el componente (p. ej. la barra del panel de administración). */
-export const policeShieldSrc = logo.src
+/** El escudo como import estático, para usos sin el componente (p. ej. la barra del panel de administración). */
+export const policeShieldImage = logo

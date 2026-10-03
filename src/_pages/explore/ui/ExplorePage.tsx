@@ -1,9 +1,17 @@
 import { Suspense } from 'react'
 import { getDestinations, getMunicipalities } from '@/shared/api'
 import { routes } from '@/shared/config'
+import { pageMetadata } from '@/shared/lib'
 import { Breadcrumb, font } from '@/shared/ui'
 import { defaultFilters } from '../model/explore-filters'
 import { ExploreResults, ExploreView } from './ExploreResults'
+
+// Canonical sin filtros: /explorar?categoria=… no compite con /explorar en los buscadores.
+export const metadata = pageMetadata({
+  title: 'Explora destinos de la Sabana de Bogotá',
+  description: 'Busca lugares turísticos de la Sabana de Bogotá por categoría (naturaleza, patrimonio, cultura, gastronomía, familiar, aventura) o por municipio.',
+  path: routes.explore,
+})
 
 export function ExplorePage() {
   const destinations = getDestinations()

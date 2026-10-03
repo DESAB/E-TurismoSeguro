@@ -1,12 +1,28 @@
 import type { CSSProperties } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { Landmark, Leaf, Mountain, Play, Theater, Users, UtensilsCrossed, type LucideIcon } from 'lucide-react'
 import { DestinationCard } from '@/entities/destination'
 import { getDestinations, getMunicipalities, getSecurityTips, getVideos } from '@/shared/api'
-import { exploreParams, routes } from '@/shared/config'
-import { slugify, unsplashUrl } from '@/shared/lib'
-import { font } from '@/shared/ui'
+import { exploreParams, routes, site } from '@/shared/config'
+import { pageMetadata, slugify, unsplashSrc } from '@/shared/lib'
+import { font, JsonLd } from '@/shared/ui'
 import styles from './home-page.module.css'
+
+export const metadata = {
+  ...pageMetadata({ title: site.title, description: site.description, path: routes.home, imageAlt: 'Paisaje verde de la Sabana de Bogotá' }),
+  // El título del inicio no lleva el sufijo "· E-TurismoSeguro" del layout
+  title: { absolute: site.title },
+}
+
+const websiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: site.name,
+  url: site.url,
+  description: site.description,
+  inLanguage: 'es-CO',
+}
 
 const categories: { name: string; Icon: LucideIcon; color: string; bg: string }[] = [
   { name: 'Naturaleza',  Icon: Leaf,            color: '#007934', bg: '#e8f5e2' },
@@ -25,12 +41,17 @@ export function HomePage() {
 
   return (
     <div>
+      <JsonLd data={websiteJsonLd} />
       {/* Hero */}
       <section style={{ position: 'relative', height: '580px', overflow: 'hidden', backgroundColor: '#233530' }}>
-        <img
-          src={unsplashUrl('1568489711036-9c94a7d5aea6', 1440, 620)}
+        <Image
+          src={unsplashSrc('1568489711036-9c94a7d5aea6')}
           alt="Paisaje verde de la Sabana de Bogotá"
-          style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.72 }}
+          fill
+          sizes="100vw"
+          loading="eager"
+          fetchPriority="high"
+          style={{ objectFit: 'cover', opacity: 0.72 }}
         />
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(0,41,20,0.82) 0%, rgba(0,41,20,0.4) 60%, transparent 100%)' }} />
         <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center' }}>
@@ -156,9 +177,12 @@ export function HomePage() {
               </Link>
             </div>
             <div style={{ position: 'relative', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 8px 40px rgba(0,0,0,0.12)' }}>
-              <img
-                src={unsplashUrl('1487203007409-91f19b5b4f62', 700, 480)}
+              <Image
+                src={unsplashSrc('1487203007409-91f19b5b4f62')}
                 alt="Vista aérea Sabana de Bogotá"
+                width={700}
+                height={380}
+                sizes="(min-width: 1280px) 616px, (min-width: 768px) 50vw, 100vw"
                 style={{ width: '100%', height: '380px', objectFit: 'cover', display: 'block' }}
               />
               <div style={{ position: 'absolute', bottom: '20px', left: '20px', background: 'white', borderRadius: '8px', padding: '12px 16px', boxShadow: '0 4px 16px rgba(0,0,0,0.12)' }}>
@@ -214,7 +238,7 @@ export function HomePage() {
                 style={{ borderRadius: '10px', overflow: 'hidden', border: '1px solid #E5E5E5', background: 'white' }}
               >
                 <div style={{ position: 'relative', height: '180px', backgroundColor: '#233530' }}>
-                  <img src={unsplashUrl(video.img, 500, 220)} alt={video.title} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.75 }} />
+                  <Image src={unsplashSrc(video.img)} alt={video.title} fill sizes="(min-width: 1280px) 400px, (min-width: 768px) 33vw, 100vw" style={{ objectFit: 'cover', opacity: 0.75 }} />
                   <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <div style={{ width: '48px', height: '48px', borderRadius: '50%', backgroundColor: 'rgba(0,121,52,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <Play size={18} fill="white" color="white" strokeWidth={0} style={{ marginLeft: '3px' }} />

@@ -1,6 +1,13 @@
 import { Globe, Mail, MapPin, Phone, Search, Shield, Smartphone } from 'lucide-react'
 import { routes } from '@/shared/config'
+import { pageMetadata } from '@/shared/lib'
 import { Breadcrumb, font, PoliceShield } from '@/shared/ui'
+
+export const metadata = pageMetadata({
+  title: 'Contacto · Departamento de Policía La Sabana',
+  description: 'Dirección, teléfonos, correo y canales de atención del Departamento de Policía La Sabana. Emergencias: línea 123.',
+  path: routes.contact,
+})
 
 const contactInfo = [
   { Icon: MapPin, label: 'Dirección',  value: 'Cra. 13 No. 1-78, Zipaquirá, Cundinamarca' },

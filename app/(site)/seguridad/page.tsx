@@ -1,1 +1,1 @@
-export { SecurityPage as default } from '@/_pages/security'
+export { SecurityPage as default, metadata } from '@/_pages/security'

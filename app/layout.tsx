@@ -1,11 +1,16 @@
 import type { Metadata } from 'next'
 import { barlowCondensed, jost } from '@/_app/styles/fonts'
+import { site } from '@/shared/config'
 import '@/_app/styles/globals.css'
 
 export const metadata: Metadata = {
-  title: 'E-TurismoSeguro · Sabana de Bogotá',
-  description:
-    'Guía turística digital interactiva de la Sabana de Bogotá. Explora destinos, patrimonio y naturaleza de manera segura.',
+  metadataBase: new URL(site.url),
+  title: {
+    default: site.title,
+    template: `%s · ${site.name}`,
+  },
+  description: site.description,
+  applicationName: site.name,
 }
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {

@@ -1,1 +1,1 @@
-export { MapPage as default } from '@/_pages/map'
+export { MapPage as default, metadata } from '@/_pages/map'

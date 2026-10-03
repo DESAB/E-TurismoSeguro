@@ -1,1 +1,1 @@
-export { ExplorePage } from './ui/ExplorePage'
+export { ExplorePage, metadata } from './ui/ExplorePage'

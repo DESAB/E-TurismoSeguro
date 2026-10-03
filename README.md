@@ -14,6 +14,12 @@ El diseño replica el prototipo de Figma Make (`E-TurismoPrototype`).
 | `pnpm deploy` | Build + despliegue a Cloudflare (requiere `wrangler login`) |
 | `pnpm cf-typegen` | Genera `cloudflare-env.d.ts` con los tipos de los bindings |
 
+## Variables de entorno
+
+| Variable | Dónde | Para qué |
+|---|---|---|
+| `NEXT_PUBLIC_SITE_URL` | Variable de **build** en Cloudflare (y `.env.local` si hace falta) | Dominio público sin barra final. Se usa en canonical, Open Graph, `sitemap.xml` y `robots.txt`. Por defecto: `http://localhost:3000`. |
+
 ## Notas
 
 - `.npmrc` usa `node-linker=hoisted`: con los symlinks de pnpm, OpenNext empaqueta en Windows

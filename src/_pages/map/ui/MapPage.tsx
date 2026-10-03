@@ -1,7 +1,16 @@
 import { getDestinations, getMunicipalities } from '@/shared/api'
 import { routes } from '@/shared/config'
+import { pageMetadata } from '@/shared/lib'
 import { Breadcrumb, font } from '@/shared/ui'
 import { MapView } from './MapView'
+
+export const metadata = pageMetadata({
+  title: 'Mapa interactivo de la Sabana de Bogotá',
+  description: 'Ubica en el mapa los municipios y destinos turísticos de la Sabana de Bogotá: Zipaquirá, Cogua, Nemocón, Tocancipá, Guasca y Chía.',
+  path: routes.map,
+  imageId: '1487203007409-91f19b5b4f62',
+  imageAlt: 'Vista aérea Sabana de Bogotá',
+})
 
 export function MapPage() {
   return (

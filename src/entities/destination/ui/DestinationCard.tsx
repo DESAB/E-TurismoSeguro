@@ -1,7 +1,8 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import type { Destination } from '@/shared/api'
 import { routes } from '@/shared/config'
-import { unsplashUrl } from '@/shared/lib'
+import { unsplashSrc } from '@/shared/lib'
 import { font } from '@/shared/ui'
 import { CategoryBadge } from './CategoryBadge'
 import styles from './destination-card.module.css'
@@ -19,11 +20,13 @@ export function DestinationCard({ dest }: { dest: Destination }) {
       }}
     >
       <div style={{ position: 'relative', height: '200px', backgroundColor: '#e8f0e8', overflow: 'hidden' }}>
-        <img
-          src={unsplashUrl(dest.imageId, 600, 300)}
+        <Image
+          src={unsplashSrc(dest.imageId)}
           alt={dest.name}
+          fill
+          sizes="(min-width: 1280px) 400px, (min-width: 768px) 50vw, 100vw"
           className={styles.image}
-          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          style={{ objectFit: 'cover' }}
         />
         <div style={{ position: 'absolute', top: '12px', left: '12px' }}>
           <CategoryBadge category={dest.category} />
