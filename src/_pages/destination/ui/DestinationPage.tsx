@@ -1,11 +1,11 @@
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
-import { Clock, ExternalLink, Info, MapPin } from 'lucide-react'
+import { Clock, ExternalLink, Info, MapPin, Phone } from 'lucide-react'
 import { CategoryBadge, DestinationCard } from '@/entities/destination'
 import type { Metadata } from 'next'
-import { getDestinationBySlug, getDestinations, type Destination } from '@/shared/api'
+import { getDestinationBySlug, getDestinations, getMunicipality, getPoliceStations, type Destination } from '@/shared/api'
 import { routes, site } from '@/shared/config'
-import { pageMetadata, unsplashSrc, unsplashUrl } from '@/shared/lib'
+import { absoluteUrl, formatPhone, pageMetadata, telHref } from '@/shared/lib'
 import { Breadcrumb, font, JsonLd, PoliceShield } from '@/shared/ui'
 import { DestinationGallery } from './DestinationGallery'
 
@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: DestinationParams): Promise<M
     title: dest.name.includes(dest.municipality) ? dest.name : `${dest.name} en ${dest.municipality}`,
     description: dest.description,
     path: routes.destination(dest.slug),
-    imageId: dest.imageId,
+    image: dest.images[0],
     imageAlt: dest.name,
   })
 }
@@ -41,10 +41,12 @@ function destinationJsonLd(dest: Destination) {
         name: dest.name,
         description: dest.longDescription,
         url,
-        image: dest.images.map(id => unsplashUrl(id, 1200, 800)),
+        image: dest.images.map(absoluteUrl),
+        ...(dest.phone && { telephone: dest.phone }),
+        ...(dest.website && { sameAs: [dest.website] }),
         address: {
           '@type': 'PostalAddress',
-          streetAddress: dest.address,
+          ...(dest.address && { streetAddress: dest.address }),
           addressLocality: dest.municipality,
           addressRegion: 'Cundinamarca',
           addressCountry: 'CO',
@@ -67,7 +69,9 @@ export async function DestinationPage({ params }: DestinationParams) {
   const dest = getDestinationBySlug(slug)
   if (!dest) notFound()
 
-  const related = getDestinations().filter(d => d.id !== dest.id && (d.municipality === dest.municipality || d.category === dest.category)).slice(0, 3)
+  const related = getDestinations().filter(d => d.id !== dest.id && (d.municipality === dest.municipality || d.categories.some(c => dest.categories.includes(c)))).slice(0, 3)
+  const stations = getPoliceStations(dest.municipality)
+  const tourismLinks = getMunicipality(dest.municipality)?.tourismLinks ?? []
 
   return (
     <div style={{ paddingTop: '64px' }}>
@@ -75,7 +79,7 @@ export async function DestinationPage({ params }: DestinationParams) {
       {/* Hero */}
       <div style={{ position: 'relative', height: '420px', backgroundColor: '#233530', overflow: 'hidden' }}>
         <Image
-          src={unsplashSrc(dest.imageId)}
+          src={dest.images[0]}
           alt={dest.name}
           fill
           sizes="100vw"
@@ -92,8 +96,8 @@ export async function DestinationPage({ params }: DestinationParams) {
               { label: dest.municipality },
               { label: dest.name },
             ]} />
-            <div className="flex items-center gap-3 mt-4 mb-2">
-              <CategoryBadge category={dest.category} />
+            <div className="flex flex-wrap items-center gap-2 mt-4 mb-2">
+              {dest.categories.map(c => <CategoryBadge key={c} category={c} />)}
             </div>
             <h1 style={{ fontFamily: font.barlow, fontSize: 'clamp(36px, 4vw, 56px)', fontWeight: 700, color: 'white', lineHeight: 1.05 }}>{dest.name}</h1>
             <p style={{ fontFamily: font.jost, color: 'rgba(255,255,255,0.8)', fontSize: '15px', marginTop: '8px' }}>{dest.municipality}, Cundinamarca</p>
@@ -106,7 +110,11 @@ export async function DestinationPage({ params }: DestinationParams) {
           {/* Main content */}
           <div className="md:col-span-2">
             <h2 style={{ fontFamily: font.barlow, fontSize: '28px', fontWeight: 600, color: '#233530', marginBottom: '16px' }}>Sobre este destino</h2>
-            <p style={{ fontFamily: font.jost, fontSize: '15px', color: '#333', lineHeight: 1.8, marginBottom: '32px' }}>{dest.longDescription}</p>
+            <div style={{ marginBottom: '32px' }}>
+              {dest.longDescription.split('\n\n').map((paragraph, i) => (
+                <p key={i} style={{ fontFamily: font.jost, fontSize: '15px', color: '#333', lineHeight: 1.8, marginTop: i ? '12px' : 0 }}>{paragraph}</p>
+              ))}
+            </div>
 
             {/* Gallery */}
             <h2 style={{ fontFamily: font.barlow, fontSize: '28px', fontWeight: 600, color: '#233530', marginBottom: '16px' }}>Galería fotográfica</h2>
@@ -114,7 +122,7 @@ export async function DestinationPage({ params }: DestinationParams) {
 
             {/* Security recommendations */}
             <div style={{ backgroundColor: '#233530', borderRadius: '12px', padding: '28px', marginBottom: '32px' }}>
-              <div className="flex items-center gap-3">
+              <div className="flex items-start sm:items-center gap-3">
                 <PoliceShield size={32} />
                 <div>
                   <h2 style={{ fontFamily: font.barlow, fontSize: '24px', fontWeight: 600, color: 'white' }}>Recomendaciones para tu visita</h2>
@@ -138,11 +146,18 @@ export async function DestinationPage({ params }: DestinationParams) {
             <div style={{ backgroundColor: '#F7F7F5', borderRadius: '10px', padding: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
               <div>
                 <div style={{ fontFamily: font.jost, fontWeight: 500, fontSize: '14px', color: '#333', marginBottom: '6px', display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                  <MapPin size={15} color="#007934" strokeWidth={2} style={{ flexShrink: 0, marginTop: '2px' }} />{dest.address}
+                  <MapPin size={15} color="#007934" strokeWidth={2} style={{ flexShrink: 0, marginTop: '2px' }} />{dest.address ?? `${dest.municipality}, Cundinamarca`}
                 </div>
-                <div style={{ fontFamily: font.jost, fontSize: '13px', color: '#76777A', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <Clock size={14} color="#76777A" strokeWidth={2} />{dest.hours}
-                </div>
+                {dest.hours && (
+                  <div style={{ fontFamily: font.jost, fontSize: '13px', color: '#76777A', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <Clock size={14} color="#76777A" strokeWidth={2} />{dest.hours}
+                  </div>
+                )}
+                {dest.phone && (
+                  <div style={{ fontFamily: font.jost, fontSize: '13px', color: '#76777A', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <Phone size={14} color="#76777A" strokeWidth={2} /><a href={telHref(dest.phone)} className="hover:underline">{dest.phone}</a>
+                  </div>
+                )}
               </div>
               <a
                 href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(dest.name + ' ' + dest.municipality + ' Colombia')}`}
@@ -166,22 +181,45 @@ export async function DestinationPage({ params }: DestinationParams) {
                 <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   {[
                     { label: 'Municipio', value: dest.municipality },
-                    { label: 'Categoría', value: dest.category },
+                    { label: dest.categories.length > 1 ? 'Categorías' : 'Categoría', value: dest.categories.join(', ') },
                     { label: 'Departamento', value: 'Cundinamarca' },
-                    { label: 'Horario', value: dest.hours },
+                    ...(dest.hours ? [{ label: 'Horario', value: dest.hours }] : []),
                   ].map(item => (
                     <div key={item.label} style={{ borderBottom: '1px solid #F1F1EF', paddingBottom: '10px' }}>
-                      <div style={{ fontFamily: font.jost, fontSize: '11px', fontWeight: 600, color: '#76777A', letterSpacing: '0.06em', marginBottom: '2px' }}>{item.label.toUpperCase()}</div>
+                      <div style={{ fontFamily: font.jost, fontSize: '12px', fontWeight: 600, color: '#76777A', letterSpacing: '0.06em', marginBottom: '2px' }}>{item.label.toUpperCase()}</div>
                       <div style={{ fontFamily: font.jost, fontSize: '14px', color: '#333', fontWeight: 500 }}>{item.value}</div>
                     </div>
                   ))}
+                  {(dest.website || tourismLinks.length > 0) && (
+                    <div style={{ borderBottom: '1px solid #F1F1EF', paddingBottom: '10px' }}>
+                      <div style={{ fontFamily: font.jost, fontSize: '12px', fontWeight: 600, color: '#76777A', letterSpacing: '0.06em', marginBottom: '2px' }}>MÁS INFORMACIÓN</div>
+                      {[
+                        ...(dest.website ? [{ href: dest.website, label: 'Página del sitio' }] : []),
+                        ...tourismLinks.map((href, i) => ({ href, label: `Turismo ${dest.municipality}${tourismLinks.length > 1 ? ` (${i + 1})` : ''}` })),
+                      ].map(link => (
+                        <a key={link.href} href={link.href} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:underline" style={{ fontFamily: font.jost, fontSize: '14px', color: '#007934', fontWeight: 500, padding: '2px 0' }}>
+                          {link.label} <ExternalLink size={12} strokeWidth={2} />
+                        </a>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
               <div style={{ border: '1px solid #E5E5E5', borderRadius: '10px', padding: '16px', backgroundColor: '#F7F7F5' }}>
                 <div style={{ fontFamily: font.jost, fontSize: '12px', fontWeight: 600, color: '#007934', marginBottom: '8px' }}>EMERGENCIAS</div>
-                <div style={{ fontFamily: font.jost, fontSize: '14px', color: '#333', fontWeight: 600, marginBottom: '4px' }}>Policía Nacional: 123</div>
-                <div style={{ fontFamily: font.jost, fontSize: '14px', color: '#333', fontWeight: 600, marginBottom: '4px' }}>Emergencias: 112</div>
-                <div style={{ fontFamily: font.jost, fontSize: '12px', color: '#76777A' }}>App MI POLICÍA disponible</div>
+                <div style={{ fontFamily: font.jost, fontSize: '14px', color: '#333', fontWeight: 600, marginBottom: '4px' }}>Policía Nacional: <a href="tel:123">123</a></div>
+                <div style={{ fontFamily: font.jost, fontSize: '14px', color: '#333', fontWeight: 600, marginBottom: '4px' }}>Emergencias: <a href="tel:112">112</a></div>
+                {stations.length > 0 && (
+                  <div style={{ borderTop: '1px solid #E5E5E5', marginTop: '12px', paddingTop: '12px' }}>
+                    <div style={{ fontFamily: font.jost, fontSize: '12px', fontWeight: 600, color: '#007934', marginBottom: '6px' }}>POLICÍA EN {dest.municipality.toUpperCase()}</div>
+                    {stations.map(s => (
+                      <div key={s.name} style={{ fontFamily: font.jost, fontSize: '13px', color: '#333', marginBottom: '6px', lineHeight: 1.4 }}>
+                        {s.name}<br />
+                        <a href={telHref(s.phone)} style={{ fontWeight: 600 }} className="hover:underline">{formatPhone(s.phone)}</a>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>

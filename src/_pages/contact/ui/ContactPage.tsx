@@ -1,4 +1,5 @@
-import { Globe, Mail, MapPin, Phone, Search, Shield, Smartphone } from 'lucide-react'
+import { Globe, Mail, MapPin, Phone, Search, Shield } from 'lucide-react'
+import Image from 'next/image'
 import { routes } from '@/shared/config'
 import { pageMetadata } from '@/shared/lib'
 import { Breadcrumb, font, PoliceShield } from '@/shared/ui'
@@ -10,17 +11,16 @@ export const metadata = pageMetadata({
 })
 
 const contactInfo = [
-  { Icon: MapPin, label: 'Dirección',  value: 'Cra. 13 No. 1-78, Zipaquirá, Cundinamarca' },
-  { Icon: Phone,  label: 'Conmutador', value: '(601) 851-5151' },
-  { Icon: Mail,   label: 'Correo',     value: 'dpolicialasabana@policia.gov.co' },
-  { Icon: Globe,  label: 'Web',        value: 'www.policia.gov.co' },
+  { Icon: MapPin, label: 'Dirección',  value: 'Cra. 13 No. 1-78, Zipaquirá, Cundinamarca', href: undefined },
+  { Icon: Phone,  label: 'Conmutador', value: '(601) 851-5151', href: 'tel:+576018515151' },
+  { Icon: Mail,   label: 'Correo',     value: 'dpolicialasabana@policia.gov.co', href: 'mailto:dpolicialasabana@policia.gov.co' },
+  { Icon: Globe,  label: 'Web',        value: 'www.policia.gov.co', href: 'https://www.policia.gov.co' },
 ]
 
 const channels = [
-  { title: 'Denuncia en línea',    desc: 'Plataforma ADENUNCIAR para reportar delitos',     color: '#007934', Icon: Shield },
-  { title: 'App MI POLICÍA',       desc: 'Descarga la aplicación oficial en iOS y Android', color: '#61A60E', Icon: Smartphone },
+  { title: 'Denuncia en línea',    desc: 'Plataforma ADENUNCIAR para reportar delitos',     color: '#007934', Icon: Shield, href: 'https://adenunciar.policia.gov.co/Adenunciar/Login.aspx' },
   { title: 'CICRI',                desc: 'Centro Investigación Criminal Regional',          color: '#006937', Icon: Search },
-  { title: 'Línea anticorrupción', desc: '018000910600 — gratuita las 24 horas',            color: '#316649', Icon: Phone },
+  { title: 'Línea anticorrupción', desc: '018000910600 — gratuita las 24 horas',            color: '#316649', Icon: Phone, href: 'tel:018000910600' },
 ]
 
 export function ContactPage() {
@@ -55,8 +55,12 @@ export function ContactPage() {
                     <item.Icon size={16} color="#007934" strokeWidth={1.75} />
                   </div>
                   <div>
-                    <div style={{ fontFamily: font.jost, fontSize: '11px', fontWeight: 600, color: '#76777A', letterSpacing: '0.06em', marginBottom: '2px' }}>{item.label.toUpperCase()}</div>
-                    <div style={{ fontFamily: font.jost, fontSize: '14px', color: '#333' }}>{item.value}</div>
+                    <div style={{ fontFamily: font.jost, fontSize: '12px', fontWeight: 600, color: '#76777A', letterSpacing: '0.06em', marginBottom: '2px' }}>{item.label.toUpperCase()}</div>
+                    <div style={{ fontFamily: font.jost, fontSize: '14px', color: '#333' }}>
+                      {item.href ? (
+                        <a href={item.href} className="hover:underline" {...(item.href.startsWith('http') && { target: '_blank', rel: 'noopener noreferrer' })}>{item.value}</a>
+                      ) : item.value}
+                    </div>
                   </div>
                 </div>
               ))}
@@ -67,8 +71,10 @@ export function ContactPage() {
           <div>
             <h3 style={{ fontFamily: font.barlow, fontSize: '24px', fontWeight: 600, color: '#233530', marginBottom: '16px' }}>Canales de atención</h3>
             <div className="flex flex-col gap-3 mb-8">
-              {channels.map(ch => (
-                <div key={ch.title} style={{ display: 'flex', alignItems: 'center', gap: '14px', border: '1px solid #E5E5E5', borderRadius: '8px', padding: '14px 16px' }}>
+              {channels.map(ch => {
+                const Tag = 'href' in ch ? 'a' : 'div'
+                return (
+                <Tag key={ch.title} {...('href' in ch && { href: ch.href, ...(ch.href?.startsWith('http') && { target: '_blank', rel: 'noopener noreferrer' }) })} style={{ display: 'flex', alignItems: 'center', gap: '14px', border: '1px solid #E5E5E5', borderRadius: '8px', padding: '14px 16px' }}>
                   <div style={{ width: '44px', height: '44px', borderRadius: '8px', backgroundColor: ch.color, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <ch.Icon size={20} color="white" strokeWidth={1.75} />
                   </div>
@@ -76,17 +82,37 @@ export function ContactPage() {
                     <div style={{ fontFamily: font.jost, fontWeight: 600, fontSize: '14px', color: '#233530' }}>{ch.title}</div>
                     <div style={{ fontFamily: font.jost, fontSize: '12px', color: '#76777A' }}>{ch.desc}</div>
                   </div>
-                </div>
-              ))}
+                </Tag>
+                )
+              })}
             </div>
 
             <div style={{ backgroundColor: '#C2D500', borderRadius: '10px', padding: '24px' }}>
               <h3 style={{ fontFamily: font.barlow, fontSize: '22px', fontWeight: 700, color: '#233530', marginBottom: '4px' }}>¿Necesitas ayuda inmediata?</h3>
               <p style={{ fontFamily: font.jost, fontSize: '13px', color: '#316649', marginBottom: '16px' }}>Llama a la línea de emergencias de la Policía Nacional</p>
-              <div style={{ fontFamily: font.barlow, fontSize: '52px', fontWeight: 700, color: '#233530', lineHeight: 1 }}>123</div>
+              <a href="tel:123" aria-label="Llamar al 123" className="block" style={{ fontFamily: font.barlow, fontSize: '52px', fontWeight: 700, color: '#233530', lineHeight: 1 }}>123</a>
               <p style={{ fontFamily: font.jost, fontSize: '12px', color: '#316649', marginTop: '4px' }}>Disponible las 24 horas, los 365 días del año</p>
             </div>
           </div>
+        </div>
+
+        {/* DIPRO — Grupo de Protección al Turismo y Patrimonio Nacional */}
+        <div className="mt-12">
+          <h3 style={{ fontFamily: font.barlow, fontSize: '24px', fontWeight: 600, color: '#233530', marginBottom: '4px' }}>Protección al Turismo</h3>
+          <p style={{ fontFamily: font.jost, fontSize: '14px', color: '#76777A', marginBottom: '16px' }}>
+            Grupo de Protección al Turismo y Patrimonio Nacional (DIPRO):{' '}
+            <a href="tel:+573223486067" className="hover:underline" style={{ color: '#007934', fontWeight: 600 }}>322 348 6067</a>
+            {' / '}
+            <a href="tel:+573223486071" className="hover:underline" style={{ color: '#007934', fontWeight: 600 }}>322 348 6071</a>
+          </p>
+          <Image
+            src="/contacto/dipro.jpg"
+            alt="DIPRO — Grupo de Protección al Turismo y Patrimonio Nacional. Teléfonos 3223486067 y 3223486071"
+            width={1377}
+            height={781}
+            sizes="(min-width: 1280px) 1232px, 100vw"
+            style={{ width: '100%', height: 'auto', borderRadius: '10px', border: '1px solid #E5E5E5' }}
+          />
         </div>
       </div>
     </div>

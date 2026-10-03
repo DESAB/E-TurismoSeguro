@@ -31,7 +31,7 @@ export function Footer() {
           <div>
             <h4 style={{ fontFamily: font.jost, fontWeight: 600, color: '#C2D500', fontSize: '13px', letterSpacing: '0.08em', marginBottom: '12px' }}>NAVEGACIÓN</h4>
             {footerLinks.map(link => (
-              <Link key={link.href} href={link.href} className="block mb-2" style={{ fontFamily: font.jost, color: 'rgba(255,255,255,0.7)', fontSize: '13px' }}>
+              <Link key={link.href} href={link.href} className="block py-2 md:py-0 md:mb-2" style={{ fontFamily: font.jost, color: 'rgba(255,255,255,0.7)', fontSize: '13px' }}>
                 {link.label}
               </Link>
             ))}
@@ -39,18 +39,17 @@ export function Footer() {
           <div>
             <h4 style={{ fontFamily: font.jost, fontWeight: 600, color: '#C2D500', fontSize: '13px', letterSpacing: '0.08em', marginBottom: '12px' }}>EMERGENCIAS</h4>
             <div style={{ fontFamily: font.jost, color: 'rgba(255,255,255,0.7)', fontSize: '13px', lineHeight: 2 }}>
-              <div>Policía Nacional: <strong style={{ color: 'white' }}>123</strong></div>
-              <div>Línea de emergencia: <strong style={{ color: 'white' }}>112</strong></div>
-              <div>Denuncia: <strong style={{ color: 'white' }}>018000910600</strong></div>
-              <div>App: <strong style={{ color: '#C2D500' }}>MI POLICÍA</strong></div>
+              <div>Policía Nacional: <a href="tel:123" style={{ color: 'white', fontWeight: 700 }}>123</a></div>
+              <div>Línea de emergencia: <a href="tel:112" style={{ color: 'white', fontWeight: 700 }}>112</a></div>
+              <div>Denuncia: <a href="tel:018000910600" style={{ color: 'white', fontWeight: 700 }}>018000910600</a></div>
             </div>
           </div>
         </div>
         <div style={{ borderTop: '1px solid rgba(255,255,255,0.12)', marginTop: '32px', paddingTop: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
           <p style={{ fontFamily: font.jost, color: 'rgba(255,255,255,0.45)', fontSize: '12px' }}>
-            © 2024 Policía Nacional de Colombia · Departamento de Policía La Sabana
+            © {new Date().getFullYear()} Policía Nacional de Colombia · Departamento de Policía La Sabana
           </p>
-          <p style={{ fontFamily: font.jost, color: 'rgba(255,255,255,0.35)', fontSize: '11px' }}>
+          <p style={{ fontFamily: font.jost, color: 'rgba(255,255,255,0.35)', fontSize: '12px' }}>
             E-TurismoSeguro · Todos los derechos reservados
           </p>
         </div>

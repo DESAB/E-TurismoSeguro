@@ -6,7 +6,7 @@ import { useState, type CSSProperties } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Play, Search } from 'lucide-react'
-import { CATEGORIES, type Destination, type Video } from '@/shared/api'
+import { CATEGORIES, type Category, type Destination, type Video } from '@/shared/api'
 import { routes } from '@/shared/config'
 import { slugify } from '@/shared/lib'
 import { font, policeShieldImage } from '@/shared/ui'
@@ -15,6 +15,21 @@ import { font, policeShieldImage } from '@/shared/ui'
 // navegador: se pierden al recargar. Fase 5: guardar en Supabase y proteger con login.
 
 const UNSPLASH_BASE = 'https://images.unsplash.com/photo-'
+
+/** Vista previa de una imagen escrita a mano: ruta del sitio, URL completa o (por compatibilidad) ID de Unsplash. */
+const previewSrc = (value: string) => (value.startsWith('/') || value.startsWith('http') ? value : `${UNSPLASH_BASE}${value}`)
+
+// El formulario trabaja con una portada (imageId) y una categoría principal, como el prototipo.
+// Se convierte al modelo de datos (images[], categories[]) al cargar y al guardar.
+type AdminDestination = Destination & { imageId: string; category: Category }
+
+const toAdmin = (d: Destination): AdminDestination => ({ ...d, imageId: d.images[0] ?? '', category: d.categories[0] ?? 'Naturaleza' })
+
+const fromAdmin = ({ imageId, category, ...d }: AdminDestination): AdminDestination => {
+  const images = imageId ? Array.from(new Set([imageId, ...d.images])) : d.images
+  const categories = [category, ...d.categories.filter(c => c !== category)]
+  return toAdmin({ ...d, images, categories, slug: d.slug || slugify(d.name) })
+}
 
 type SaveState = 'idle' | 'saving' | 'saved' | 'error'
 
@@ -25,11 +40,11 @@ export function AdminPage({
   initialVideos: Video[]
   municipalities: string[]
 }) {
-  const [destinations, setDestinations] = useState<Destination[]>(initialDestinations)
+  const [destinations, setDestinations] = useState<AdminDestination[]>(() => initialDestinations.map(toAdmin))
   const [videos, setVideos] = useState<Video[]>(initialVideos)
 
-  const onAddDest    = (d: Destination) => setDestinations(prev => [...prev, d])
-  const onEditDest   = (d: Destination) => setDestinations(prev => prev.map(x => x.id === d.id ? d : x))
+  const onAddDest    = (d: AdminDestination) => setDestinations(prev => [...prev, d])
+  const onEditDest   = (d: AdminDestination) => setDestinations(prev => prev.map(x => x.id === d.id ? d : x))
   const onDeleteDest = (id: string)     => setDestinations(prev => prev.filter(x => x.id !== id))
 
   const onAddVideo    = (v: Video) => setVideos(prev => [...prev, v])
@@ -38,23 +53,25 @@ export function AdminPage({
 
   // ── State ──
   const [tab, setTab] = useState<'destinos' | 'videos'>('destinos')
-  const [selectedDest, setSelectedDest] = useState<Destination | null>(destinations[0] ?? null)
+  const [selectedDest, setSelectedDest] = useState<AdminDestination | null>(destinations[0] ?? null)
   const [selectedVideo, setSelectedVideo] = useState<Video | null>(videos[0] ?? null)
   const [search, setSearch] = useState('')
   const [confirmDelete, setConfirmDelete] = useState<{ id: string; type: 'dest' | 'video' } | null>(null)
   const [saveState, setSaveState] = useState<SaveState>('idle')
-  const [destForm, setDestForm] = useState<Destination | null>(null)
+  const [destForm, setDestForm] = useState<AdminDestination | null>(null)
   const [videoForm, setVideoForm] = useState<Video | null>(null)
 
   // ── Helpers ──
-  const emptyDest = (): Destination => ({
+  const emptyDest = (): AdminDestination => ({
     id: Date.now().toString(), slug: '', name: '', municipality: municipalities[0],
-    category: 'Naturaleza', description: '', longDescription: '',
-    imageId: '', images: [], coordinates: { x: 50, y: 50 },
+    category: 'Naturaleza', categories: ['Naturaleza'], description: '', longDescription: '',
+    // El formulario aún no edita la ubicación (Fase 5): centro de la Sabana, marcado como aproximado
+    location: { lat: 4.86, lon: -74.06, approximate: 'sin ubicar' },
+    imageId: '', images: [],
     address: '', hours: '', tips: ['', '', ''],
   })
   const emptyVideo = (): Video => ({
-    id: Date.now().toString(), title: '', subtitle: '', img: '', duration: '', featured: false,
+    id: Date.now().toString(), title: '', subtitle: '', img: '', duration: '', featured: false, url: '',
   })
 
   const simulateSave = (fn: () => void) => {
@@ -64,11 +81,7 @@ export function AdminPage({
 
   const saveDest = () => {
     if (!destForm) return
-    const d = {
-      ...destForm,
-      slug: destForm.slug || slugify(destForm.name),
-      images: destForm.imageId ? Array.from(new Set([destForm.imageId, ...destForm.images])) : destForm.images,
-    }
+    const d = fromAdmin(destForm)
     simulateSave(() => {
       const isNew = !destinations.find(x => x.id === d.id)
       if (isNew) onAddDest(d)
@@ -201,7 +214,7 @@ export function AdminPage({
                   textAlign: 'left',
                 }}>
                   <div style={{ width: '44px', height: '34px', borderRadius: '4px', overflow: 'hidden', backgroundColor: '#e8f0e8', flexShrink: 0 }}>
-                    {d.imageId && <img src={`${UNSPLASH_BASE}${d.imageId}?w=88&h=68&fit=crop`} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />}
+                    {d.imageId && <img src={previewSrc(d.imageId)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />}
                   </div>
                   <div style={{ minWidth: 0 }}>
                     <div style={{ fontFamily: font.jost, fontWeight: 600, fontSize: '13px', color: sel ? '#007934' : '#233530', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{d.name || <em style={{ opacity: 0.4 }}>Sin nombre</em>}</div>
@@ -221,7 +234,7 @@ export function AdminPage({
                   textAlign: 'left',
                 }}>
                   <div style={{ position: 'relative', width: '44px', height: '34px', borderRadius: '4px', overflow: 'hidden', backgroundColor: '#e8f0e8', flexShrink: 0 }}>
-                    {v.img && <img src={`${UNSPLASH_BASE}${v.img}?w=88&h=68&fit=crop`} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.85 }} />}
+                    {v.img && <img src={previewSrc(v.img)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.85 }} />}
                     <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <Play size={10} fill="white" color="white" strokeWidth={0} style={{ marginLeft: '1px' }} />
                     </div>
@@ -279,7 +292,7 @@ export function AdminPage({
                     </div>
                     <div>
                       <label style={D.lbl}>CATEGORÍA</label>
-                      <select style={D.inp} value={form.category} onChange={e => setDestForm(f => f && ({ ...f, category: e.target.value as Destination['category'] }))}>
+                      <select style={D.inp} value={form.category} onChange={e => setDestForm(f => f && ({ ...f, category: e.target.value as Category }))}>
                         {CATEGORIES.map(c => <option key={c}>{c}</option>)}
                       </select>
                     </div>
@@ -294,10 +307,10 @@ export function AdminPage({
 
                     {/* Image */}
                     <div style={{ gridColumn: '1/-1' }}>
-                      <label style={D.lbl}>IMAGEN PRINCIPAL — ID Unsplash</label>
-                      <input style={D.inp} value={form.imageId} onChange={e => setDestForm(f => f && ({ ...f, imageId: e.target.value }))} placeholder="Ej: 1724027212141-7244bc12678a" />
+                      <label style={D.lbl}>IMAGEN PRINCIPAL — ruta o URL</label>
+                      <input style={D.inp} value={form.imageId} onChange={e => setDestForm(f => f && ({ ...f, imageId: e.target.value }))} placeholder="Ej: /destinos/catedral-de-sal/1.jpg" />
                       {form.imageId ? (
-                        <img src={`${UNSPLASH_BASE}${form.imageId}?w=640&h=200&fit=crop`} alt="preview" style={{ marginTop: '8px', width: '100%', height: '130px', objectFit: 'cover', borderRadius: '6px', border: '1px solid #E5E5E5' }} />
+                        <img src={previewSrc(form.imageId)} alt="preview" style={{ marginTop: '8px', width: '100%', height: '130px', objectFit: 'cover', borderRadius: '6px', border: '1px solid #E5E5E5' }} />
                       ) : (
                         <div style={{ marginTop: '8px', width: '100%', height: '80px', border: '1px dashed #D1D1D1', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: font.jost, fontSize: '11px', color: '#C8C8C8' }}>
                           IMAGEN PRINCIPAL
@@ -307,7 +320,7 @@ export function AdminPage({
 
                     {/* Imágenes de galería */}
                     <div style={{ gridColumn: '1/-1' }}>
-                      <label style={D.lbl}>IMÁGENES DE GALERÍA — IDs separados por coma</label>
+                      <label style={D.lbl}>IMÁGENES DE GALERÍA — rutas o URLs separadas por coma</label>
                       <input style={D.inp} value={form.images.filter(i => i !== form.imageId).join(', ')} onChange={e => setDestForm(f => f && ({ ...f, images: e.target.value.split(',').map(s => s.trim()).filter(Boolean) }))} placeholder="id1, id2, id3" />
                       <div style={{ fontFamily: font.jost, fontSize: '11px', color: '#76777A', marginTop: '4px' }}>{form.images.length} imagen{form.images.length !== 1 ? 'es' : ''} en galería</div>
                     </div>
@@ -360,7 +373,7 @@ export function AdminPage({
                 <div style={D.sec}>
                   <div style={D.secTitle}>IMAGEN PRINCIPAL</div>
                   {view.imageId ? (
-                    <img src={`${UNSPLASH_BASE}${view.imageId}?w=700&h=220&fit=crop`} alt={view.name} style={{ width: '100%', height: '180px', objectFit: 'cover', borderRadius: '8px', display: 'block', border: '1px solid #E5E5E5' }} />
+                    <img src={previewSrc(view.imageId)} alt={view.name} style={{ width: '100%', height: '180px', objectFit: 'cover', borderRadius: '8px', display: 'block', border: '1px solid #E5E5E5' }} />
                   ) : (
                     <div style={{ height: '100px', border: '1px dashed #D1D1D1', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: font.jost, fontSize: '12px', color: '#C8C8C8' }}>
                       IMAGEN PRINCIPAL — sin asignar
@@ -377,7 +390,7 @@ export function AdminPage({
                   <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                     {view.images.length > 0 ? view.images.map((img, i) => (
                       <div key={i} style={{ width: '80px', height: '56px', borderRadius: '5px', overflow: 'hidden', backgroundColor: '#e8f0e8', border: '1px solid #E5E5E5' }}>
-                        <img src={`${UNSPLASH_BASE}${img}?w=160&h=112&fit=crop`} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        <img src={previewSrc(img)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                       </div>
                     )) : <span style={{ fontFamily: font.jost, fontSize: '12px', color: '#C8C8C8' }}>Sin imágenes en galería</span>}
                     <div style={{ fontFamily: font.jost, fontSize: '11px', color: '#76777A', display: 'flex', alignItems: 'center' }}>{view.images.length} imagen{view.images.length !== 1 ? 'es' : ''}</div>
@@ -397,7 +410,7 @@ export function AdminPage({
                         {related.map(v => (
                           <div key={v.id} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '8px', backgroundColor: '#F2F2F2', borderRadius: '6px' }}>
                             <div style={{ position: 'relative', width: '52px', height: '36px', borderRadius: '4px', overflow: 'hidden', backgroundColor: '#e8f0e8', flexShrink: 0 }}>
-                              {v.img && <img src={`${UNSPLASH_BASE}${v.img}?w=104&h=72&fit=crop`} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.7 }} />}
+                              {v.img && <img src={previewSrc(v.img)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.7 }} />}
                               <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                 <Play size={10} fill="white" color="white" strokeWidth={0} style={{ marginLeft: '1px' }} />
                               </div>
@@ -483,11 +496,11 @@ export function AdminPage({
                       <input style={D.inp} value={form.subtitle} onChange={e => setVideoForm(f => f && ({ ...f, subtitle: e.target.value }))} placeholder="Ej: Zipaquirá · Patrimonio" />
                     </div>
                     <div>
-                      <label style={D.lbl}>MINIATURA — ID Unsplash</label>
+                      <label style={D.lbl}>MINIATURA — URL</label>
                       <input style={D.inp} value={form.img} onChange={e => setVideoForm(f => f && ({ ...f, img: e.target.value }))} placeholder="Ej: 1724027212141-7244bc12678a" />
                       {form.img ? (
                         <div style={{ position: 'relative', marginTop: '8px', borderRadius: '6px', overflow: 'hidden', height: '110px', backgroundColor: '#233530', border: '1px solid #E5E5E5' }}>
-                          <img src={`${UNSPLASH_BASE}${form.img}?w=640&h=220&fit=crop`} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.7 }} />
+                          <img src={previewSrc(form.img)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.7 }} />
                           <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <div style={{ width: '44px', height: '44px', borderRadius: '50%', backgroundColor: 'rgba(0,121,52,0.85)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                               <Play size={18} fill="white" color="white" strokeWidth={0} style={{ marginLeft: '3px' }} />
@@ -538,7 +551,7 @@ export function AdminPage({
                   <div style={D.secTitle}>MINIATURA</div>
                   {view.img ? (
                     <div style={{ position: 'relative', borderRadius: '8px', overflow: 'hidden', height: '200px', backgroundColor: '#233530' }}>
-                      <img src={`${UNSPLASH_BASE}${view.img}?w=700&h=280&fit=crop`} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.65, display: 'block' }} />
+                      <img src={previewSrc(view.img)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.65, display: 'block' }} />
                       <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <div style={{ width: '60px', height: '60px', borderRadius: '50%', backgroundColor: 'rgba(0,121,52,0.85)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                           <Play size={24} fill="white" color="white" strokeWidth={0} style={{ marginLeft: '4px' }} />

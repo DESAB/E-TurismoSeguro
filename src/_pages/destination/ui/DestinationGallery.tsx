@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
-import { unsplashSrc } from '@/shared/lib'
 import { font } from '@/shared/ui'
 import styles from './destination-gallery.module.css'
 
@@ -21,7 +20,7 @@ export function DestinationGallery({ name, images }: { name: string; images: str
             style={{ position: 'relative', borderRadius: '8px', overflow: 'hidden', aspectRatio: '4/3', backgroundColor: '#e8f0e8' }}
           >
             <Image
-              src={unsplashSrc(imgId)}
+              src={imgId}
               alt={`Fotografía ${i + 1} de ${name}`}
               fill
               sizes="(min-width: 1280px) 260px, (min-width: 768px) 22vw, 33vw"
@@ -56,7 +55,7 @@ export function DestinationGallery({ name, images }: { name: string; images: str
             onClick={e => { e.stopPropagation(); setLightboxIndex((lightboxIndex - 1 + images.length) % images.length) }}
           >‹</button>
           <Image
-            src={unsplashSrc(images[lightboxIndex])}
+            src={images[lightboxIndex]}
             alt={`Fotografía ${lightboxIndex + 1}`}
             width={1200}
             height={800}

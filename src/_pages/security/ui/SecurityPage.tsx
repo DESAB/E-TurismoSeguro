@@ -62,10 +62,10 @@ export function SecurityPage() {
           <p style={{ fontFamily: font.jost, color: '#316649', fontSize: '14px', marginBottom: '28px' }}>Guárdalos en tu teléfono antes de salir</p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {emergencyNumbers.map(item => (
-              <div key={item.number} style={{ backgroundColor: 'rgba(35,53,48,0.1)', borderRadius: '8px', padding: '16px', textAlign: 'center' }}>
+              <a key={item.number} href={`tel:${item.number}`} aria-label={`Llamar a ${item.label}: ${item.number}`} className="block" style={{ backgroundColor: 'rgba(35,53,48,0.1)', borderRadius: '8px', padding: '16px', textAlign: 'center' }}>
                 <div style={{ fontFamily: font.barlow, fontSize: '36px', fontWeight: 700, color: '#233530' }}>{item.number}</div>
                 <div style={{ fontFamily: font.jost, fontSize: '12px', color: '#316649', fontWeight: 500 }}>{item.label}</div>
-              </div>
+              </a>
             ))}
           </div>
         </div>

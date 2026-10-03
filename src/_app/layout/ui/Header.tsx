@@ -49,14 +49,14 @@ export function Header() {
             <div style={{ fontFamily: font.jost, fontWeight: 700, fontSize: '13px', color: '#C2D500', letterSpacing: '0.08em', lineHeight: 1 }}>
               E-TurismoSeguro
             </div>
-            <div style={{ fontFamily: font.jost, fontWeight: 400, fontSize: '10px', color: 'rgba(255,255,255,0.75)', letterSpacing: '0.04em', lineHeight: 1.2, marginTop: 2 }}>
+            <div style={{ fontFamily: font.jost, fontWeight: 400, fontSize: '12px', color: 'rgba(255,255,255,0.75)', letterSpacing: '0.04em', lineHeight: 1.2, marginTop: 2 }}>
               Dep. Policía La Sabana
             </div>
           </div>
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden md:flex items-center gap-1">
+        <nav className="hidden lg:flex items-center gap-1">
           {navItems.map(item => {
             const isAdmin = item.href === routes.admin
             const active = isActive(item.href)
@@ -101,7 +101,7 @@ export function Header() {
 
         {/* Mobile hamburger */}
         <button
-          className="md:hidden flex flex-col gap-1.5 p-2"
+          className="lg:hidden flex flex-col gap-1.5 p-2"
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label="Abrir menú"
           aria-expanded={menuOpen}

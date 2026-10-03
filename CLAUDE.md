@@ -19,7 +19,6 @@ No rediseñar ni "mejorar" por cuenta propia.
   `MapPage` (824), `DestinationPage` (1020), `SecurityPage` (1208), `VideosPage` (1283),
   `ContactPage` (1345), `AdminPage` (1431), datos iniciales y `App` (2012).
 - Paleta y fuentes: `D:\E-TurismoPrototype\src\index.css` (ya portadas a `src/_app/styles/globals.css`).
-- Fotos de destinos: URLs de `images.unsplash.com` (requiere `images.remotePatterns` si se usa `next/image`).
 - Para verlo: `pnpm dev` en esa carpeta → http://localhost:8443.
 
 Fuentes: vienen de `next/font` con nombres internos. En estilos inline usar `font.jost` / `font.barlow`
@@ -91,7 +90,59 @@ Diferencias deliberadas con el prototipo (aprobadas):
 4. Las categorías del inicio enlazan a `/explorar?categoria=…` (el prototipo iba a Explorar sin filtro).
 5. Los destinos nuevos creados en el admin reciben un slug (`slugify(nombre)`).
 
-Cualquier **otro** problema de diseño o responsive: **no tocarlo**. El usuario quiere revisarlo aparte, después.
+### ✅ Revisión de diseño y responsive (hecha, sin commit ni deploy)
+Revisadas las 8 páginas a 375/768/1024/1440 px. Corregido (aprobado por el usuario; se aparta del prototipo):
+1. **Mapa en móvil:** el mapa va arriba (420 px) y la lista de municipios debajo; desde `md`, barra lateral de 280 px
+   como el prototipo. En móvil se ocultan las etiquetas de municipio del mapa (se solapan) y, al tocar un pin, la
+   tarjeta del destino se desplaza a la vista.
+2. **Teléfonos, correo y web como enlaces** (`tel:`, `mailto:`) en Footer, Destino, Seguridad y Contacto.
+3. **Header:** menú hamburguesa hasta 1024 px (`lg`); a 768 px el menú completo no cabía.
+4. **Zonas táctiles:** enlaces del footer de 36 px en móvil, breadcrumb de 44 px (padding + margen negativo),
+   filtros de Explorar más altos y pines del mapa con botón de 44 px (el pin se ve igual).
+5. **Texto mínimo de 12 px** en las páginas públicas (antes había etiquetas de 10–11 px). El admin no se tocó.
+6. **Año del footer** automático (`new Date().getFullYear()`, se fija en cada build).
+7. **"Recomendaciones para tu visita":** el escudo se alinea arriba en móvil.
+
+Pendiente de esa revisión (depende del contenido o de la Fase 5):
+- **Admin inutilizable en móvil:** se rehace en la Fase 5 con shadcn.
+- **Dato inconsistente:** 018000910600 aparece como "Denuncia" en el Footer y como "Línea anticorrupción" en Contacto.
+- Los canales "Denuncia en línea", "App MI POLICÍA" y "CICRI" de Contacto no enlazan a nada (faltan las URLs oficiales).
+
+### ✅ Contenido oficial cargado (hecho, sin commit ni deploy)
+Fuente: carpeta `Sitios/` del proyecto (Excel organizado por el usuario + 3 Word entregados por la Policía, con
+permiso para publicar textos, fotos y teléfonos). **Solo se usan datos de esos documentos**: no inventar horarios,
+direcciones ni datos; si un campo no está, se omite (el diseño ya oculta horario/teléfono cuando faltan).
+- **20 municipios** (`src/shared/api/municipalities.ts`) con enlaces de turismo tal cual los entregaron y lat/lon
+  **aproximada** del centro urbano (solo para el mapa ilustrativo). Los 6 sin sitios (Cajicá, Cota, Gachancipá, Tenjo,
+  El Rosal, Funza) se quedan: se les agregarán sitios después. **No cambiar el diseño por ellos.**
+- **30 destinos** (`destinations.ts`): textos del Word, fotos en `public/destinos/<slug>/<n>.jpg` (optimizadas a
+  máx. 1600 px). Modelo: `categories: Category[]` (tipología del usuario; la primera se muestra en tarjetas, todas en la
+  ficha), `images: string[]` (rutas), `address/hours/phone/website` opcionales, `tips` (3 recomendaciones).
+  Zipaquirá agrupada en 8 fichas (Centro Histórico incluye Plaza de los Comuneros, Catedral Diocesana, Casa de los
+  Virreyes, balcones, Plaza de la Independencia y Plaza de los Mártires). Chicaque va en **Bojacá** (decisión del usuario).
+  6 sitios con **tipología propuesta** (comentario en el código): Estación del Tren, Casa Museo Quevedo, Plaza
+  Villaveces, Parque La Esmeralda, Iglesia San Francisco de Asís y Catedral del Rosario → el usuario debe confirmarla.
+- **Retirados mientras se verifican "uno a uno":** Lagunas de Siecha y Parque y Templo de Chía (redirección 302 a
+  Explorar filtrado). Renombrados con 301: laguna-de-neusa → embalse-del-neusa, mina-de-sal-nemocon → mina-de-sal-de-nemocon.
+- **33 estaciones/subestaciones/CAI** (`police-stations.ts`): se muestran en la ficha de cada destino ("Policía en
+  <municipio>", con `tel:`). El Word trae más que el Excel (p. ej. Subestación Neusa, 4 CAI de Facatativá).
+- **Videos:** los 2 reales de YouTube del Word (Zipaquirá, Termales El Zipa); enlazan a YouTube; sin duración.
+- **Fotos:** hero del inicio = Cerro El Tablazo; teaser del mapa = Piedras de Chivonegro; fondo del mapa = Embalse del Neusa.
+  Baja resolución (se ven borrosas en grande): Chingaza (300 px), Pionono (358 px), una de Centro Histórico (471 px).
+- **Mapa real e interactivo** (aprobado por el usuario): `_pages/map/ui/SabanaMap.tsx` con **MapLibre GL 5** y el
+  estilo `positron` de **OpenFreeMap** (teselas vectoriales de OSM, gratis, sin clave). MapLibre se importa dinámicamente,
+  solo en /mapa. Destinos agrupados (cluster) con su número; clic en grupo = acercar; clic en sitio = tarjeta en la barra
+  lateral; nombres de los sitios desde zoom 11. Al elegir un municipio se encuadran sus sitios y se listan en la barra
+  lateral (también sirve para usar el mapa con teclado); municipio sin sitios → se centra en él. En móvil:
+  `cooperativeGestures` (dos dedos para mover) y leyenda oculta. Textos de los controles en español.
+- **Ubicaciones** (`location` en cada destino): de OpenStreetMap (Nominatim/Overpass), revisadas a mano. Ubicaciones
+  reales que pueden sorprender: Embalse del Neusa (límite Cogua-Tausa), Chingaza (centro del parque, en Guasca),
+  Chicaque (corredor de Soacha; en los datos sigue en Bojacá por decisión del usuario), Cerro El Tablazo (cumbre,
+  límite Subachoque-Supatá). **Aproximadas, a verificar con la Policía:** Sendero de los Zipas, Casa Museo Quevedo
+  Zornoza (por dirección) y Parque La Esmeralda (barrio).
+- **Admin:** adaptado con un formato interno (portada + categoría principal) que se convierte al modelo al cargar/guardar.
+- Categoría **Gastronomía** sin sitios: muestra el estado vacío (no se tocó el diseño).
+- Verificado: build (42 páginas), lint, tipos, flujos interactivos y Workers (OpenNext + populateCache + wrangler dev).
 
 ### ✅ Fase 3 — SEO e imágenes (hecha, sin commit)
 - **Metadata:** título con plantilla `%s · E-TurismoSeguro` (el inicio usa `title.absolute`), descripción,
@@ -101,22 +152,27 @@ Cualquier **otro** problema de diseño o responsive: **no tocarlo**. El usuario 
 - **JSON-LD:** `WebSite` en el inicio; `TouristAttraction` + `BreadcrumbList` en cada destino (`<JsonLd>` escapa `<`).
 - **`/sitemap.xml` y `/robots.txt`** (robots bloquea `/admin`).
 - **Imágenes:** `next/image` con loader propio (`src/shared/lib/image-loader.ts`, `images.loaderFile` en
-  `next.config.ts`): Unsplash redimensiona con `?w=&auto=format`, sin `sharp` ni Cloudflare Images. Las fotos usan
-  `unsplashSrc(id)` + `fill`/`sizes`; los héroes llevan `loading="eager"` + `fetchPriority="high"` (en Next 16
+  `next.config.ts`), sin `sharp` ni Cloudflare Images. Hoy las fotos son locales y ya optimizadas, así que se sirven
+  tal cual (ver "Contenido oficial cargado"). Usan `fill`/`sizes`; los héroes llevan `loading="eager"` + `fetchPriority="high"` (en Next 16
   `priority` está obsoleto). Solo el admin conserva `<img>` (vistas previas de IDs escritos a mano; eslint-disable en ese archivo).
 - Verificado: build, lint, typecheck; misma altura que el prototipo en todas las páginas (las fotos ahora se ven
   algo más nítidas por el srcset); y en Workers (OpenNext + populateCache + wrangler dev) rutas, sitemap, robots y flujos OK.
 
-**Pendiente al desplegar:** definir `NEXT_PUBLIC_SITE_URL` (dominio público, sin barra final) como variable de
+**Al desplegar** se definió `NEXT_PUBLIC_SITE_URL` (dominio público, sin barra final) como variable de
 **build** en Cloudflare. Sin ella, canonical, Open Graph, sitemap y robots apuntan a `http://localhost:3000`.
 Después: dar de alta el sitio en Google Search Console y enviar el sitemap.
 
-### ⏳ Fase 4 — Despliegue
-1. Crear el repo en GitHub (sugerido `MateoLLanosT/E-TurismoSeguro`; **preguntar** si privado o público).
-2. Conectarlo en Cloudflare → Workers & Pages → Import repository. Build command: `npx opennextjs-cloudflare build`.
-   Deploy command: `npx opennextjs-cloudflare deploy`. Si hace falta, variable `NODE_VERSION=22`.
-3. Variable de build `NEXT_PUBLIC_SITE_URL` con el dominio público (ver Fase 3).
-4. El usuario aún **no ha hecho login** en Cloudflare ni dado un account ID. Nada se ha desplegado.
+### ✅ Fase 4 — Despliegue (hecha, 2026-10-03)
+- Repo: **`DESAB/E-TurismoSeguro`** en GitHub, conectado a Cloudflare Workers Builds (rama `main` → producción).
+- URL: **https://e-turismo-seguro.desab2026.workers.dev** (Worker `e-turismo-seguro`, cuenta `desab2026`). Sin dominio propio aún.
+- Build `npx opennextjs-cloudflare build` · Deploy `npx opennextjs-cloudflare deploy` (puebla la caché solo) ·
+  Preview `npx opennextjs-cloudflare upload` (no usar `wrangler preview`: no existe en wrangler 4).
+- Variable de **build** `NEXT_PUBLIC_SITE_URL=https://e-turismo-seguro.desab2026.workers.dev`. Al conectar un
+  dominio propio: cambiarla y volver a desplegar (se lee en el build).
+- Verificado en producción: todas las rutas 200, destino inexistente 404, robots/sitemap/canonical/OG/JSON-LD con la URL real.
+- El nombre del proyecto en Cloudflare debe coincidir con `name` de `wrangler.jsonc` (`e-turismo-seguro`).
+- Pendiente: dar de alta el sitio en Google Search Console y enviar `/sitemap.xml`.
+- ⚠️ `/admin` es público hasta la Fase 5 (sin login; los cambios no se guardan). No difundir la URL como oficial antes.
 
 ### ⏳ Fase 5 — Supabase (después)
 Tablas (destinos, videos, municipios, galería), RLS, Storage para imágenes, Auth para `/admin`.
@@ -130,13 +186,13 @@ Sustituir el cuerpo de los getters de `src/shared/api/`. Cambiar la caché incre
   **poblarla** después del build (`populateCache`; `preview` y `deploy` lo hacen solos). Sin poblarla, las páginas
   de `/destinos/[slug]` dan 404 (`NoFallbackError`) y cada request deja `ERROR ... Failed to set to read-only cache`.
   Pasar a `r2IncrementalCache` cuando haya revalidación (ISR) con Supabase.
-- **Imágenes:** las fotos de Unsplash son temporales. Con fotos propias (Supabase Storage) hay que añadir su rama
-  en `image-loader.ts` (transformaciones de Supabase o Cloudflare Images).
+- **Imágenes:** con fotos en Supabase Storage o Cloudflare Images, devolver en `image-loader.ts` la URL con el ancho
+  pedido (hoy las fotos locales no se redimensionan: el móvil descarga la de 1600 px).
 - **Componentes:** hechos a mano (réplica del prototipo). Plan acordado: usar **shadcn/ui** (en `src/shared/ui`,
   con el estilo del prototipo) para el admin real en la Fase 5; las páginas públicas se quedan como están.
 - **Estilos inline** copiados del prototipo: funcionan, pero cuestan de mantener. Migrarlos a Tailwind es una mejora aparte.
-- **Revisión de diseño y responsive** del prototipo: pendiente, el usuario quiere hacerla aparte.
-  Ejemplo conocido: en móvil el Mapa mantiene la barra lateral de 280 px (igual que el prototipo).
+- **Secciones nuevas** (pendiente de definir con el usuario): p. ej. directorio de estaciones de Policía por municipio
+  (los datos ya están en `police-stations.ts`) o páginas por municipio con sus enlaces de turismo.
 
 ## Particularidades del entorno (Windows)
 

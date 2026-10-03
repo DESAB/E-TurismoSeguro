@@ -16,7 +16,7 @@ export function Breadcrumb({ items }: { items: BreadcrumbItem[] }) {
         <span key={i} className="flex items-center gap-2">
           {i > 0 && <span style={{ color: 'rgba(255,255,255,0.4)' }}>/</span>}
           {item.href ? (
-            <Link href={item.href} className="hover:underline" style={{ color: 'rgba(255,255,255,0.75)' }}>{item.label}</Link>
+            <Link href={item.href} className="hover:underline inline-block py-3 -my-3" style={{ color: 'rgba(255,255,255,0.75)' }}>{item.label}</Link>
           ) : (
             <span aria-current="page" style={{ color: 'white', fontWeight: 500 }}>{item.label}</span>
           )}

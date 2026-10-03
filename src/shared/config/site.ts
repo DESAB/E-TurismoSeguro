@@ -6,8 +6,8 @@ export const site = {
   url: (process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000').replace(/\/$/, ''),
   title: 'E-TurismoSeguro · Guía turística de la Sabana de Bogotá',
   description:
-    'Descubre la Sabana de Bogotá de manera segura: destinos, patrimonio, naturaleza y recomendaciones de la Policía Nacional en Zipaquirá, Cogua, Nemocón, Tocancipá, Guasca y Chía.',
+    'Descubre la Sabana de Bogotá de manera segura: destinos, patrimonio, naturaleza y recomendaciones de la Policía Nacional en los municipios de la Regional Metropolitana de la Sabana.',
   locale: 'es_CO',
-  /** Foto por defecto para compartir en redes (ID de Unsplash del hero del inicio) */
-  defaultImageId: '1568489711036-9c94a7d5aea6',
+  /** Foto por defecto para compartir en redes (la del hero del inicio: Cerro El Tablazo, Subachoque) */
+  defaultImage: '/destinos/cerro-el-tablazo/1.jpg',
 } as const

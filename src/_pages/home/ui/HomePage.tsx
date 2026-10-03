@@ -5,12 +5,12 @@ import { Landmark, Leaf, Mountain, Play, Theater, Users, UtensilsCrossed, type L
 import { DestinationCard } from '@/entities/destination'
 import { getDestinations, getMunicipalities, getSecurityTips, getVideos } from '@/shared/api'
 import { exploreParams, routes, site } from '@/shared/config'
-import { pageMetadata, slugify, unsplashSrc } from '@/shared/lib'
+import { pageMetadata, slugify } from '@/shared/lib'
 import { font, JsonLd } from '@/shared/ui'
 import styles from './home-page.module.css'
 
 export const metadata = {
-  ...pageMetadata({ title: site.title, description: site.description, path: routes.home, imageAlt: 'Paisaje verde de la Sabana de Bogotá' }),
+  ...pageMetadata({ title: site.title, description: site.description, path: routes.home, imageAlt: 'Cerro El Tablazo, Subachoque' }),
   // El título del inicio no lleva el sufijo "· E-TurismoSeguro" del layout
   title: { absolute: site.title },
 }
@@ -45,8 +45,8 @@ export function HomePage() {
       {/* Hero */}
       <section style={{ position: 'relative', height: '580px', overflow: 'hidden', backgroundColor: '#233530' }}>
         <Image
-          src={unsplashSrc('1568489711036-9c94a7d5aea6')}
-          alt="Paisaje verde de la Sabana de Bogotá"
+          src="/destinos/cerro-el-tablazo/1.jpg"
+          alt="Cerro El Tablazo, Subachoque, Sabana de Bogotá"
           fill
           sizes="100vw"
           loading="eager"
@@ -138,7 +138,7 @@ export function HomePage() {
               href={routes.explore}
               style={{ fontFamily: font.jost, fontWeight: 600, fontSize: '13px', color: '#007934', border: '1.5px solid #007934', padding: '8px 20px', borderRadius: '6px' }}
             >
-              Ver todos →
+              Ver todos
             </Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -173,13 +173,13 @@ export function HomePage() {
                 className="inline-block"
                 style={{ fontFamily: font.jost, fontWeight: 600, fontSize: '14px', backgroundColor: '#007934', color: 'white', padding: '12px 28px', borderRadius: '7px' }}
               >
-                Abrir mapa interactivo →
+                Abrir mapa interactivo
               </Link>
             </div>
             <div style={{ position: 'relative', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 8px 40px rgba(0,0,0,0.12)' }}>
               <Image
-                src={unsplashSrc('1487203007409-91f19b5b4f62')}
-                alt="Vista aérea Sabana de Bogotá"
+                src="/destinos/piedras-de-chivonegro/1.jpg"
+                alt="Piedras de Chivonegro, Bojacá, Sabana de Bogotá"
                 width={700}
                 height={380}
                 sizes="(min-width: 1280px) 616px, (min-width: 768px) 50vw, 100vw"
@@ -207,7 +207,7 @@ export function HomePage() {
               href={routes.security}
               style={{ fontFamily: font.jost, fontWeight: 600, fontSize: '13px', color: '#C2D500', border: '1.5px solid #C2D500', padding: '8px 20px', borderRadius: '6px' }}
             >
-              Ver todas las recomendaciones →
+              Ver todas las recomendaciones
             </Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
@@ -238,13 +238,13 @@ export function HomePage() {
                 style={{ borderRadius: '10px', overflow: 'hidden', border: '1px solid #E5E5E5', background: 'white' }}
               >
                 <div style={{ position: 'relative', height: '180px', backgroundColor: '#233530' }}>
-                  <Image src={unsplashSrc(video.img)} alt={video.title} fill sizes="(min-width: 1280px) 400px, (min-width: 768px) 33vw, 100vw" style={{ objectFit: 'cover', opacity: 0.75 }} />
+                  <Image src={video.img} alt={video.title} fill sizes="(min-width: 1280px) 400px, (min-width: 768px) 33vw, 100vw" style={{ objectFit: 'cover', opacity: 0.75 }} />
                   <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <div style={{ width: '48px', height: '48px', borderRadius: '50%', backgroundColor: 'rgba(0,121,52,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <Play size={18} fill="white" color="white" strokeWidth={0} style={{ marginLeft: '3px' }} />
                     </div>
                   </div>
-                  <div style={{ position: 'absolute', bottom: '10px', right: '10px', backgroundColor: 'rgba(0,0,0,0.7)', color: 'white', fontSize: '11px', padding: '2px 6px', borderRadius: '3px', fontFamily: font.jost }}>{video.duration}</div>
+                  {video.duration && <div style={{ position: 'absolute', bottom: '10px', right: '10px', backgroundColor: 'rgba(0,0,0,0.7)', color: 'white', fontSize: '12px', padding: '2px 6px', borderRadius: '3px', fontFamily: font.jost }}>{video.duration}</div>}
                 </div>
                 <div style={{ padding: '14px' }}>
                   <p style={{ fontFamily: font.jost, fontWeight: 500, fontSize: '14px', color: '#233530', lineHeight: 1.4 }}>{video.title}</p>

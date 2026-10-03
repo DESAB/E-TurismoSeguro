@@ -35,7 +35,7 @@ export function filtersToQuery(filters: ExploreFilters): string {
 
 export function filterDestinations(destinations: Destination[], { category, municipality, search }: ExploreFilters): Destination[] {
   return destinations.filter(d => {
-    const matchCategory = category === ALL || d.category === category
+    const matchCategory = category === ALL || d.categories.includes(category)
     const matchMunicipality = municipality === ALL || d.municipality === municipality
     const matchSearch = search === '' || d.name.toLowerCase().includes(search.toLowerCase()) || d.municipality.toLowerCase().includes(search.toLowerCase())
     return matchCategory && matchMunicipality && matchSearch

@@ -1,4 +1,4 @@
-import { getDestinations, getMunicipalities } from '@/shared/api'
+import { getDestinations, getMunicipalityList } from '@/shared/api'
 import { routes } from '@/shared/config'
 import { pageMetadata } from '@/shared/lib'
 import { Breadcrumb, font } from '@/shared/ui'
@@ -8,13 +8,11 @@ export const metadata = pageMetadata({
   title: 'Mapa interactivo de la Sabana de Bogotá',
   description: 'Ubica en el mapa los municipios y destinos turísticos de la Sabana de Bogotá: Zipaquirá, Cogua, Nemocón, Tocancipá, Guasca y Chía.',
   path: routes.map,
-  imageId: '1487203007409-91f19b5b4f62',
-  imageAlt: 'Vista aérea Sabana de Bogotá',
 })
 
 export function MapPage() {
   return (
-    <div style={{ paddingTop: '64px', display: 'flex', flexDirection: 'column', height: '100vh' }}>
+    <div className="flex flex-col md:h-screen" style={{ paddingTop: '64px' }}>
       {/* Page header. El prototipo usaba padding '32px 24px' sin px-6 en el contenedor, lo que
           corría el contenido ~24px a la izquierda respecto al resto de páginas. */}
       <div style={{ backgroundColor: '#007934', padding: '32px 0 24px' }}>
@@ -24,7 +22,7 @@ export function MapPage() {
         </div>
       </div>
 
-      <MapView destinations={getDestinations()} municipalities={getMunicipalities()} />
+      <MapView destinations={getDestinations()} municipalityList={getMunicipalityList()} />
     </div>
   )
 }
