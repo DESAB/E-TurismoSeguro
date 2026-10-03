@@ -8,6 +8,6 @@ export const site = {
   description:
     'Descubre la Sabana de Bogotá de manera segura: destinos, patrimonio, naturaleza y recomendaciones de la Policía Nacional en los municipios de la Regional Metropolitana de la Sabana.',
   locale: 'es_CO',
-  /** Foto por defecto para compartir en redes (la del hero del inicio: Cerro El Tablazo, Subachoque) */
-  defaultImage: '/destinos/cerro-el-tablazo/1.jpg',
+  /** Foto por defecto para compartir en redes (la del hero del inicio: Policía de Turismo en el Parque Jaime Duque) */
+  defaultImage: '/policia/jaime-duque.jpg',
 } as const

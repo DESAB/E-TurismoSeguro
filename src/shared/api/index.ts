@@ -9,3 +9,4 @@ export { getMunicipalities, getMunicipalityList, getMunicipality, type Municipal
 export { getPoliceStations, type PoliceStation } from './police-stations'
 export { getVideos, type Video } from './videos'
 export { getSecurityTips, type SecurityTip } from './security-tips'
+export { getPolicePhotos, getFeaturedPolicePhotos, policeTeamPhoto, type PolicePhoto } from './police-photos'

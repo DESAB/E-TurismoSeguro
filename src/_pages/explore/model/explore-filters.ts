@@ -33,11 +33,20 @@ export function filtersToQuery(filters: ExploreFilters): string {
   return query ? `?${query}` : ''
 }
 
+/** Minúsculas y sin tildes: "zipaquira" encuentra "Zipaquirá". */
+const fold = (text: string) => text.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
+
 export function filterDestinations(destinations: Destination[], { category, municipality, search }: ExploreFilters): Destination[] {
+  const query = fold(search.trim())
   return destinations.filter(d => {
     const matchCategory = category === ALL || d.categories.includes(category)
     const matchMunicipality = municipality === ALL || d.municipality === municipality
-    const matchSearch = search === '' || d.name.toLowerCase().includes(search.toLowerCase()) || d.municipality.toLowerCase().includes(search.toLowerCase())
+    const matchSearch = query === '' || fold(d.name).includes(query) || fold(d.municipality).includes(query)
     return matchCategory && matchMunicipality && matchSearch
   })
+}
+
+/** Cuántos filtros (categoría o municipio) están aplicados, sin contar el texto de búsqueda. */
+export function activeFilterCount({ category, municipality }: ExploreFilters): number {
+  return Number(category !== ALL) + Number(municipality !== ALL)
 }

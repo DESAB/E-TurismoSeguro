@@ -1,7 +1,8 @@
-import { getSecurityTips } from '@/shared/api'
+import { getPolicePhotos, getSecurityTips } from '@/shared/api'
 import { routes } from '@/shared/config'
 import { pageMetadata } from '@/shared/lib'
 import { Breadcrumb, font, PoliceShield } from '@/shared/ui'
+import { PoliceGallery } from './PoliceGallery'
 
 export const metadata = pageMetadata({
   title: 'Viaja seguro: recomendaciones de la Policía Nacional',
@@ -21,13 +22,13 @@ export function SecurityPage() {
 
   return (
     <div style={{ paddingTop: '64px' }}>
-      <div style={{ backgroundColor: '#233530', padding: '80px 0 48px' }}>
+      <div className="pt-20 pb-7 md:pb-12" style={{ backgroundColor: '#233530' }}>
         <div className="max-w-7xl mx-auto px-6">
           <Breadcrumb items={[{ label: 'Inicio', href: routes.home }, { label: 'Viaja seguro' }]} />
           <div className="flex items-center gap-4 mt-6">
             <PoliceShield size={48} />
             <div>
-              <h1 style={{ fontFamily: font.barlow, fontSize: '48px', fontWeight: 700, color: 'white', lineHeight: 1 }}>Viaja seguro</h1>
+              <h1 className="text-[34px] md:text-[48px]" style={{ fontFamily: font.barlow, fontWeight: 700, color: 'white', lineHeight: 1 }}>Viaja seguro</h1>
               <p style={{ fontFamily: font.jost, color: 'rgba(255,255,255,0.7)', fontSize: '16px', marginTop: '8px' }}>Recomendaciones de la Policía Nacional para tu visita a la Sabana</p>
             </div>
           </div>
@@ -82,6 +83,16 @@ export function SecurityPage() {
             </div>
           </div>
         </div>
+
+        {/* Acompañamiento: fotos del Grupo de Protección al Turismo */}
+        <section id="acompanamiento" className="mt-14 scroll-mt-24">
+          <div style={{ fontFamily: font.jost, fontSize: '12px', fontWeight: 600, color: '#007934', letterSpacing: '0.12em', marginBottom: '8px' }}>TE ACOMPAÑAMOS</div>
+          <h2 style={{ fontFamily: font.barlow, fontSize: '32px', fontWeight: 600, color: '#233530', marginBottom: '8px' }}>Policía de Turismo en la Sabana</h2>
+          <p style={{ fontFamily: font.jost, fontSize: '14px', color: '#76777A', lineHeight: 1.7, marginBottom: '24px', maxWidth: '720px' }}>
+            El Grupo de Protección al Turismo y Patrimonio Nacional acompaña a visitantes en los destinos, eventos y recorridos de la región, y adelanta campañas de prevención y control a prestadores turísticos.
+          </p>
+          <PoliceGallery photos={getPolicePhotos()} />
+        </section>
       </div>
     </div>
   )

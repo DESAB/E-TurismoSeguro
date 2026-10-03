@@ -19,10 +19,10 @@ export function VideosPage() {
 
   return (
     <div style={{ paddingTop: '64px' }}>
-      <div style={{ backgroundColor: '#007934', padding: '80px 0 40px' }}>
+      <div className="pt-20 pb-7 md:pb-10" style={{ backgroundColor: '#007934' }}>
         <div className="max-w-7xl mx-auto px-6">
           <Breadcrumb items={[{ label: 'Inicio', href: routes.home }, { label: 'Videos' }]} />
-          <h1 style={{ fontFamily: font.barlow, fontSize: '48px', fontWeight: 700, color: 'white', marginTop: '16px' }}>Videos</h1>
+          <h1 className="text-[34px] md:text-[48px]" style={{ fontFamily: font.barlow, fontWeight: 700, color: 'white', marginTop: '16px' }}>Videos</h1>
           <p style={{ fontFamily: font.jost, color: 'rgba(255,255,255,0.75)', fontSize: '16px' }}>Conoce la Sabana de Bogotá a través de sus imágenes</p>
         </div>
       </div>

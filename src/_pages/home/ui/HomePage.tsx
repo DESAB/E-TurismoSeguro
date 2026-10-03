@@ -3,14 +3,14 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Landmark, Leaf, Mountain, Play, Theater, Users, UtensilsCrossed, type LucideIcon } from 'lucide-react'
 import { DestinationCard } from '@/entities/destination'
-import { getDestinations, getMunicipalities, getSecurityTips, getVideos } from '@/shared/api'
+import { getDestinations, getFeaturedPolicePhotos, getMunicipalities, getPolicePhotos, getSecurityTips, getVideos } from '@/shared/api'
 import { exploreParams, routes, site } from '@/shared/config'
 import { pageMetadata, slugify } from '@/shared/lib'
 import { font, JsonLd } from '@/shared/ui'
 import styles from './home-page.module.css'
 
 export const metadata = {
-  ...pageMetadata({ title: site.title, description: site.description, path: routes.home, imageAlt: 'Cerro El Tablazo, Subachoque' }),
+  ...pageMetadata({ title: site.title, description: site.description, path: routes.home, imageAlt: 'Policía de Turismo acompañando a una familia en el Parque Jaime Duque, Tocancipá' }),
   // El título del inicio no lleva el sufijo "· E-TurismoSeguro" del layout
   title: { absolute: site.title },
 }
@@ -38,6 +38,8 @@ export function HomePage() {
   const municipalities = getMunicipalities()
   const videos = getVideos()
   const securityTips = getSecurityTips()
+  const heroPhoto = getPolicePhotos()[0]
+  const escortPhotos = getFeaturedPolicePhotos()
 
   return (
     <div>
@@ -45,13 +47,14 @@ export function HomePage() {
       {/* Hero */}
       <section style={{ position: 'relative', height: '580px', overflow: 'hidden', backgroundColor: '#233530' }}>
         <Image
-          src="/destinos/cerro-el-tablazo/1.jpg"
-          alt="Cerro El Tablazo, Subachoque, Sabana de Bogotá"
+          src={heroPhoto.src}
+          alt={heroPhoto.caption}
           fill
           sizes="100vw"
           loading="eager"
           fetchPriority="high"
-          style={{ objectFit: 'cover', opacity: 0.72 }}
+          // El policía y la familia están a la derecha: así el texto (a la izquierda) no los tapa
+          style={{ objectFit: 'cover', objectPosition: '70% 62%', opacity: 0.8 }}
         />
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(0,41,20,0.82) 0%, rgba(0,41,20,0.4) 60%, transparent 100%)' }} />
         <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center' }}>
@@ -219,6 +222,48 @@ export function HomePage() {
                 <h3 style={{ fontFamily: font.jost, fontWeight: 600, fontSize: '15px', color: 'white', marginBottom: '8px' }}>{tip.title}</h3>
                 <p style={{ fontFamily: font.jost, fontSize: '13px', color: 'rgba(255,255,255,0.6)', lineHeight: 1.6 }}>{tip.tips[0]}</p>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Acompañamiento policial */}
+      <section style={{ padding: '72px 0', backgroundColor: '#F7F7F5' }}>
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex items-end justify-between mb-8 flex-wrap gap-4">
+            <div>
+              <div style={{ fontFamily: font.jost, fontSize: '12px', fontWeight: 600, color: '#007934', letterSpacing: '0.12em', marginBottom: '8px' }}>POLICÍA DE TURISMO</div>
+              <h2 style={{ fontFamily: font.barlow, fontSize: '36px', fontWeight: 600, color: '#233530' }}>Te acompañamos</h2>
+              <p style={{ fontFamily: font.jost, color: '#76777A', fontSize: '15px', marginTop: '8px', maxWidth: '560px' }}>La Policía de La Sabana acompaña a los visitantes en cada destino, evento y recorrido de la región.</p>
+            </div>
+            <Link
+              href={`${routes.security}#acompanamiento`}
+              style={{ fontFamily: font.jost, fontWeight: 600, fontSize: '13px', color: '#007934', border: '1.5px solid #007934', padding: '8px 20px', borderRadius: '6px' }}
+            >
+              Ver todas las fotos
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 auto-rows-[130px] md:auto-rows-[190px] gap-3">
+            {escortPhotos.map((photo, i) => (
+              <Link
+                key={photo.src}
+                href={`${routes.security}#acompanamiento`}
+                aria-label={photo.caption}
+                className={`${i === 0 ? 'col-span-2 row-span-2' : ''} relative block overflow-hidden group`}
+                style={{ borderRadius: '10px', backgroundColor: '#e8f0e8' }}
+              >
+                <Image
+                  src={photo.src}
+                  alt={photo.caption}
+                  fill
+                  sizes={i === 0 ? '(min-width: 1280px) 620px, (min-width: 768px) 50vw, 100vw' : '(min-width: 1280px) 300px, (min-width: 768px) 25vw, 50vw'}
+                  className="transition-transform duration-300 group-hover:scale-105"
+                  style={{ objectFit: 'cover' }}
+                />
+                <div style={{ position: 'absolute', inset: 'auto 0 0 0', padding: '28px 12px 10px', background: 'linear-gradient(to top, rgba(0,0,0,0.65), transparent)', fontFamily: font.jost, fontSize: i === 0 ? '14px' : '12px', color: 'white', lineHeight: 1.35 }}>
+                  {photo.caption}
+                </div>
+              </Link>
             ))}
           </div>
         </div>

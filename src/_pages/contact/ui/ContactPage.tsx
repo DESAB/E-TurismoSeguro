@@ -1,5 +1,6 @@
 import { Globe, Mail, MapPin, Phone, Search, Shield } from 'lucide-react'
 import Image from 'next/image'
+import { policeTeamPhoto } from '@/shared/api'
 import { routes } from '@/shared/config'
 import { pageMetadata } from '@/shared/lib'
 import { Breadcrumb, font, PoliceShield } from '@/shared/ui'
@@ -26,10 +27,10 @@ const channels = [
 export function ContactPage() {
   return (
     <div style={{ paddingTop: '64px' }}>
-      <div style={{ backgroundColor: '#007934', padding: '80px 0 48px' }}>
+      <div className="pt-20 pb-7 md:pb-12" style={{ backgroundColor: '#007934' }}>
         <div className="max-w-7xl mx-auto px-6">
           <Breadcrumb items={[{ label: 'Inicio', href: routes.home }, { label: 'Contacto' }]} />
-          <h1 style={{ fontFamily: font.barlow, fontSize: '48px', fontWeight: 700, color: 'white', marginTop: '16px' }}>Contacto</h1>
+          <h1 className="text-[34px] md:text-[48px]" style={{ fontFamily: font.barlow, fontWeight: 700, color: 'white', marginTop: '16px' }}>Contacto</h1>
           <p style={{ fontFamily: font.jost, color: 'rgba(255,255,255,0.75)', fontSize: '16px' }}>Información institucional y canales de comunicación</p>
         </div>
       </div>
@@ -105,14 +106,27 @@ export function ContactPage() {
             {' / '}
             <a href="tel:+573223486071" className="hover:underline" style={{ color: '#007934', fontWeight: 600 }}>322 348 6071</a>
           </p>
-          <Image
-            src="/contacto/dipro.jpg"
-            alt="DIPRO — Grupo de Protección al Turismo y Patrimonio Nacional. Teléfonos 3223486067 y 3223486071"
-            width={1377}
-            height={781}
-            sizes="(min-width: 1280px) 1232px, 100vw"
-            style={{ width: '100%', height: 'auto', borderRadius: '10px', border: '1px solid #E5E5E5' }}
-          />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+            <figure style={{ margin: 0 }}>
+              <Image
+                src={policeTeamPhoto.src}
+                alt={policeTeamPhoto.caption}
+                width={policeTeamPhoto.width}
+                height={policeTeamPhoto.height}
+                sizes="(min-width: 1280px) 604px, (min-width: 768px) 50vw, 100vw"
+                style={{ width: '100%', height: 'auto', borderRadius: '10px' }}
+              />
+              <figcaption style={{ fontFamily: font.jost, fontSize: '12px', color: '#76777A', marginTop: '8px' }}>El equipo que te atiende: {policeTeamPhoto.caption}</figcaption>
+            </figure>
+            <Image
+              src="/contacto/dipro.jpg"
+              alt="DIPRO — Grupo de Protección al Turismo y Patrimonio Nacional. Teléfonos 3223486067 y 3223486071"
+              width={1377}
+              height={781}
+              sizes="(min-width: 1280px) 604px, (min-width: 768px) 50vw, 100vw"
+              style={{ width: '100%', height: 'auto', borderRadius: '10px', border: '1px solid #E5E5E5' }}
+            />
+          </div>
         </div>
       </div>
     </div>

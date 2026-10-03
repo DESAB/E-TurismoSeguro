@@ -1,8 +1,9 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { ChevronDown, MapPin, X } from 'lucide-react'
 import { CategoryBadge } from '@/entities/destination'
 import type { Destination, Municipality } from '@/shared/api'
 import { routes } from '@/shared/config'
@@ -10,13 +11,17 @@ import { font } from '@/shared/ui'
 import { municipalityColor } from '../model/municipality-colors'
 import { SabanaMap } from './SabanaMap'
 
+const legendDot: CSSProperties = { width: '10px', height: '10px', borderRadius: '50%', border: '2px solid white', boxShadow: '0 1px 3px rgba(0,0,0,0.25)', flexShrink: 0 }
+const legendCluster: CSSProperties = { width: '16px', height: '16px', borderRadius: '50%', backgroundColor: '#007934', color: 'white', fontSize: '9px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }
+
 export function MapView({ destinations, municipalityList }: { destinations: Destination[]; municipalityList: Municipality[] }) {
   const [selectedMunicipality, setSelectedMunicipality] = useState<string | null>(null)
   const [selectedDest, setSelectedDest] = useState<Destination | null>(null)
   const [muniSearch, setMuniSearch] = useState('')
+  const [listOpen, setListOpen] = useState(false)
   const selectedCardRef = useRef<HTMLDivElement>(null)
 
-  // En móvil la tarjeta del destino queda debajo del mapa, fuera de la pantalla: llevarla a la vista al elegir un sitio.
+  // En móvil el borde inferior del mapa (donde flota la tarjeta) puede quedar fuera de la pantalla: llevarla a la vista.
   useEffect(() => {
     if (selectedDest && window.matchMedia('(max-width: 767px)').matches) {
       selectedCardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
@@ -45,8 +50,31 @@ export function MapView({ destinations, municipalityList }: { destinations: Dest
     <div className="flex flex-col md:flex-row flex-1 md:overflow-hidden md:max-h-[calc(100vh-160px)]">
       {/* Sidebar (en móvil, debajo del mapa) */}
       <div className="order-2 md:order-none w-full md:w-[280px] shrink-0 flex flex-col md:overflow-hidden md:border-r border-[#E5E5E5]" style={{ backgroundColor: '#F7F7F5' }}>
+        {/* Leyenda compacta (en móvil la del mapa no cabe) */}
+        <div className="md:hidden flex flex-wrap items-center gap-x-4 gap-y-1" style={{ padding: '10px 16px', backgroundColor: 'white', borderBottom: '1px solid #E5E5E5', fontFamily: font.jost, fontSize: '12px', color: '#76777A' }}>
+          <span className="flex items-center gap-1.5"><span style={{ ...legendDot, backgroundColor: '#007934' }} />Destino</span>
+          <span className="flex items-center gap-1.5"><span style={{ ...legendDot, backgroundColor: '#C2D500' }} />Seleccionado</span>
+          <span className="flex items-center gap-1.5"><span style={legendCluster}>3</span>Grupo: toca para acercar</span>
+        </div>
+
+        {/* En móvil la lista va plegada tras este botón para no empujar la página */}
+        <button
+          type="button"
+          onClick={() => setListOpen(o => !o)}
+          aria-expanded={listOpen}
+          aria-controls="map-municipalities"
+          className="md:hidden flex items-center gap-2 w-full text-left"
+          style={{ padding: '14px 16px', borderBottom: '1px solid #E5E5E5', fontFamily: font.jost, fontSize: '14px', color: '#233530' }}
+        >
+          <MapPin size={16} color="#007934" strokeWidth={2} />
+          <span style={{ fontWeight: 600 }}>Municipios</span>
+          <span style={{ color: selectedMunicipality ? '#007934' : '#76777A', fontWeight: selectedMunicipality ? 600 : 400 }}>· {selectedMunicipality ?? `Todos (${municipalityList.length})`}</span>
+          <ChevronDown size={18} strokeWidth={2} style={{ marginLeft: 'auto', transform: listOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }} />
+        </button>
+
+        <div id="map-municipalities" className={`${listOpen ? 'flex' : 'hidden'} md:flex flex-col flex-1 md:overflow-hidden`}>
         <div style={{ padding: '16px', borderBottom: '1px solid #E5E5E5' }}>
-          <h3 style={{ fontFamily: font.jost, fontWeight: 600, fontSize: '13px', color: '#233530', marginBottom: '10px', letterSpacing: '0.06em' }}>MUNICIPIOS</h3>
+          <h3 className="hidden md:block" style={{ fontFamily: font.jost, fontWeight: 600, fontSize: '13px', color: '#233530', marginBottom: '10px', letterSpacing: '0.06em' }}>MUNICIPIOS</h3>
           <input
             value={muniSearch}
             onChange={e => setMuniSearch(e.target.value)}
@@ -56,6 +84,12 @@ export function MapView({ destinations, municipalityList }: { destinations: Dest
           />
         </div>
         <div style={{ overflowY: 'auto', flex: 1 }}>
+          {filteredMunis.length === 0 && (
+            <div style={{ padding: '20px 16px', fontFamily: font.jost, fontSize: '13px', color: '#76777A' }}>
+              Ningún municipio coincide con «{muniSearch}».{' '}
+              <button type="button" onClick={() => setMuniSearch('')} className="hover:underline" style={{ color: '#007934', fontWeight: 600 }}>Ver todos</button>
+            </div>
+          )}
           {filteredMunis.map(muni => {
             const isSelected = selectedMunicipality === muni.name
             const muniDests = destinations.filter(d => d.municipality === muni.name)
@@ -100,21 +134,7 @@ export function MapView({ destinations, municipalityList }: { destinations: Dest
             )
           })}
         </div>
-        {selectedDest && (
-          <div ref={selectedCardRef} className="order-first md:order-none border-b md:border-b-0 md:border-t border-[#E5E5E5]" style={{ padding: '16px', backgroundColor: 'white' }}>
-            <Image src={selectedDest.images[0]} alt={selectedDest.name} width={248} height={120} sizes="248px" style={{ width: '100%', height: '120px', objectFit: 'cover', borderRadius: '6px', marginBottom: '10px' }} />
-            <CategoryBadge category={selectedDest.categories[0]} />
-            <h4 style={{ fontFamily: font.barlow, fontWeight: 600, fontSize: '18px', color: '#233530', margin: '6px 0 4px' }}>{selectedDest.name}</h4>
-            <p style={{ fontFamily: font.jost, fontSize: '12px', color: '#76777A', marginBottom: '10px' }}>{selectedDest.municipality}</p>
-            <Link
-              href={routes.destination(selectedDest.slug)}
-              className="block text-center"
-              style={{ width: '100%', padding: '8px', backgroundColor: '#007934', color: 'white', borderRadius: '6px', fontFamily: font.jost, fontWeight: 600, fontSize: '12px' }}
-            >
-              Explorar destino
-            </Link>
-          </div>
-        )}
+        </div>
       </div>
 
       {/* Map */}
@@ -126,8 +146,48 @@ export function MapView({ destinations, municipalityList }: { destinations: Dest
           onSelect={selectDestination}
         />
 
+        {/* Destino elegido: tarjeta flotante junto a donde el usuario está mirando (no en la barra lateral) */}
+        {selectedDest && (
+          <div
+            ref={selectedCardRef}
+            className="flex md:flex-col gap-3 md:gap-0 left-3 right-3 md:right-auto md:left-4 md:w-[300px]"
+            style={{ position: 'absolute', bottom: '32px', zIndex: 30, backgroundColor: 'white', borderRadius: '10px', padding: '12px', boxShadow: '0 4px 20px rgba(0,0,0,0.18)' }}
+          >
+            <button
+              type="button"
+              onClick={() => setSelectedDest(null)}
+              aria-label="Cerrar"
+              className="flex items-center justify-center"
+              style={{ position: 'absolute', top: '8px', right: '8px', zIndex: 1, width: '28px', height: '28px', borderRadius: '50%', backgroundColor: 'rgba(255,255,255,0.92)', boxShadow: '0 1px 4px rgba(0,0,0,0.15)', color: '#233530' }}
+            >
+              <X size={16} strokeWidth={2.25} />
+            </button>
+            <Image
+              src={selectedDest.images[0]}
+              alt={selectedDest.name}
+              width={276}
+              height={140}
+              sizes="(min-width: 768px) 276px, 96px"
+              className="w-24 h-24 md:w-full md:h-[140px] md:mb-2.5 shrink-0"
+              style={{ objectFit: 'cover', borderRadius: '6px' }}
+            />
+            <div className="flex flex-col min-w-0 flex-1">
+              <div><CategoryBadge category={selectedDest.categories[0]} /></div>
+              <h4 style={{ fontFamily: font.barlow, fontWeight: 600, fontSize: '18px', lineHeight: 1.15, color: '#233530', margin: '6px 28px 2px 0' }}>{selectedDest.name}</h4>
+              <p style={{ fontFamily: font.jost, fontSize: '12px', color: '#76777A', marginBottom: '10px' }}>{selectedDest.municipality}</p>
+              <Link
+                href={routes.destination(selectedDest.slug)}
+                className="block text-center mt-auto"
+                style={{ width: '100%', padding: '9px', backgroundColor: '#007934', color: 'white', borderRadius: '6px', fontFamily: font.jost, fontWeight: 600, fontSize: '13px' }}
+              >
+                Explorar destino
+              </Link>
+            </div>
+          </div>
+        )}
+
         {/* Map legend */}
-        <div className="hidden md:block" style={{ position: 'absolute', bottom: '32px', right: '16px', backgroundColor: 'rgba(255,255,255,0.94)', borderRadius: '8px', padding: '12px 16px', boxShadow: '0 2px 12px rgba(0,0,0,0.1)' }}>
+        <div className={`hidden ${selectedDest ? 'xl:block' : 'md:block'}`} style={{ position: 'absolute', bottom: '32px', right: '16px', backgroundColor: 'rgba(255,255,255,0.94)', borderRadius: '8px', padding: '12px 16px', boxShadow: '0 2px 12px rgba(0,0,0,0.1)' }}>
           <div style={{ fontFamily: font.jost, fontSize: '12px', fontWeight: 600, color: '#333', marginBottom: '8px' }}>LEYENDA</div>
           <div className="flex items-center gap-2 mb-2">
             <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#007934', border: '2px solid white', boxShadow: '0 1px 4px rgba(0,0,0,0.2)' }} />

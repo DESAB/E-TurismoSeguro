@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
-import { font } from '@/shared/ui'
+import { Lightbox } from '@/shared/ui'
 import styles from './destination-gallery.module.css'
 
 export function DestinationGallery({ name, images }: { name: string; images: string[] }) {
@@ -35,43 +35,14 @@ export function DestinationGallery({ name, images }: { name: string; images: str
         ))}
       </div>
 
-      {/* Lightbox */}
       {lightboxOpen && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-label={`Galería de ${name}`}
-          style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.92)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-          onClick={() => setLightboxOpen(false)}
-        >
-          <button
-            aria-label="Cerrar"
-            style={{ position: 'absolute', top: '20px', right: '20px', color: 'white', fontSize: '32px', background: 'none', lineHeight: 1 }}
-            onClick={() => setLightboxOpen(false)}
-          >×</button>
-          <button
-            aria-label="Anterior"
-            style={{ position: 'absolute', left: '20px', color: 'white', fontSize: '32px', background: 'none' }}
-            onClick={e => { e.stopPropagation(); setLightboxIndex((lightboxIndex - 1 + images.length) % images.length) }}
-          >‹</button>
-          <Image
-            src={images[lightboxIndex]}
-            alt={`Fotografía ${lightboxIndex + 1}`}
-            width={1200}
-            height={800}
-            sizes="90vw"
-            style={{ maxWidth: '90vw', maxHeight: '85vh', width: 'auto', height: 'auto', objectFit: 'contain', borderRadius: '4px' }}
-            onClick={e => e.stopPropagation()}
-          />
-          <button
-            aria-label="Siguiente"
-            style={{ position: 'absolute', right: '20px', color: 'white', fontSize: '32px', background: 'none' }}
-            onClick={e => { e.stopPropagation(); setLightboxIndex((lightboxIndex + 1) % images.length) }}
-          >›</button>
-          <div style={{ position: 'absolute', bottom: '20px', left: '50%', transform: 'translateX(-50%)', color: 'rgba(255,255,255,0.6)', fontFamily: font.jost, fontSize: '13px' }}>
-            {lightboxIndex + 1} / {images.length}
-          </div>
-        </div>
+        <Lightbox
+          photos={images.map((src, i) => ({ src, alt: `Fotografía ${i + 1} de ${name}` }))}
+          index={lightboxIndex}
+          onIndexChange={setLightboxIndex}
+          onClose={() => setLightboxOpen(false)}
+          label={`Galería de ${name}`}
+        />
       )}
     </>
   )
