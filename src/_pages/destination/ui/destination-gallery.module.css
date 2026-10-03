@@ -1,0 +1,8 @@
+/* Oscurecido al pasar sobre una foto (antes con onMouseEnter/onMouseLeave). */
+.overlay {
+  background-color: rgba(0, 0, 0, 0);
+  transition: background 0.2s;
+}
+.overlay:hover {
+  background-color: rgba(0, 0, 0, 0.25);
+}

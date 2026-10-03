@@ -1,0 +1,47 @@
+/* Efectos hover del prototipo (antes con onMouseEnter/onMouseLeave). */
+
+.heroPrimary {
+  background-color: #007934;
+  transition: background 0.2s;
+}
+.heroPrimary:hover {
+  background-color: #005a27;
+}
+
+.heroSecondary {
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  transition: border-color 0.2s;
+}
+.heroSecondary:hover {
+  border-color: rgba(255, 255, 255, 0.9);
+}
+
+/* Tarjeta de categoría: --cat-color y --cat-bg vienen inline */
+.category {
+  background: white;
+  border: 2px solid #E5E5E5;
+  box-shadow: none;
+  transition: all 0.2s;
+}
+.category:hover {
+  background: var(--cat-color);
+  border-color: var(--cat-color);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.categoryIcon {
+  background-color: var(--cat-bg);
+  color: var(--cat-color);
+  transition: all 0.2s;
+}
+.category:hover .categoryIcon {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.categoryLabel {
+  color: #233530;
+}
+.category:hover .categoryLabel {
+  color: white;
+}

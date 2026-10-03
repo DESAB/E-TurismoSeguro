@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+/* Paleta y tipografías del prototipo de Figma Make (E-TurismoPrototype/src/index.css) */
+@theme inline {
+  --color-brand-primary: #007934;
+  --color-brand-dark: #006937;
+  --color-brand-accent: #C2D500;
+  --color-brand-green2: #61A60E;
+  --color-brand-gray: #C8C8C8;
+  --color-brand-gray-dark: #76777A;
+  --color-brand-deep: #233530;
+  --font-jost: var(--font-jost), "Helvetica", "Arial", sans-serif;
+  --font-barlow: var(--font-barlow), "Helvetica", "Arial", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-jost), "Helvetica", "Arial", sans-serif;
+  background-color: #FFFFFF;
+  color: #333333;
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1ef;
+}
+::-webkit-scrollbar-thumb {
+  background: #C8C8C8;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #76777A;
+}

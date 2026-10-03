@@ -1,0 +1,7 @@
+/* Foco del buscador (antes con onFocus/onBlur). */
+.search {
+  border: 1.5px solid #E5E5E5;
+}
+.search:focus {
+  border-color: #007934;
+}

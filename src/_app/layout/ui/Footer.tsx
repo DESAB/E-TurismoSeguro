@@ -1,0 +1,60 @@
+import Link from 'next/link'
+import { routes } from '@/shared/config'
+import { font, PoliceShield } from '@/shared/ui'
+
+const footerLinks = [
+  { label: 'Inicio', href: routes.home },
+  { label: 'Explorar', href: routes.explore },
+  { label: 'Mapa', href: routes.map },
+  { label: 'Seguridad', href: routes.security },
+  { label: 'Videos', href: routes.videos },
+  { label: 'Contacto', href: routes.contact },
+]
+
+export function Footer() {
+  return (
+    <footer style={{ backgroundColor: '#006937' }}>
+      <div className="max-w-7xl mx-auto px-6 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="md:col-span-2">
+            <div className="flex items-center gap-3 mb-4">
+              <PoliceShield size={44} />
+              <div>
+                <div style={{ fontFamily: font.jost, fontWeight: 700, color: '#C2D500', fontSize: '15px' }}>E-TurismoSeguro</div>
+                <div style={{ fontFamily: font.jost, color: 'rgba(255,255,255,0.7)', fontSize: '12px' }}>Departamento de Policía La Sabana</div>
+              </div>
+            </div>
+            <p style={{ fontFamily: font.jost, color: 'rgba(255,255,255,0.65)', fontSize: '13px', lineHeight: 1.7, maxWidth: '340px' }}>
+              Guía turística digital interactiva de la Sabana de Bogotá. Explora destinos, patrimonio y naturaleza de manera segura.
+            </p>
+          </div>
+          <div>
+            <h4 style={{ fontFamily: font.jost, fontWeight: 600, color: '#C2D500', fontSize: '13px', letterSpacing: '0.08em', marginBottom: '12px' }}>NAVEGACIÓN</h4>
+            {footerLinks.map(link => (
+              <Link key={link.href} href={link.href} className="block mb-2" style={{ fontFamily: font.jost, color: 'rgba(255,255,255,0.7)', fontSize: '13px' }}>
+                {link.label}
+              </Link>
+            ))}
+          </div>
+          <div>
+            <h4 style={{ fontFamily: font.jost, fontWeight: 600, color: '#C2D500', fontSize: '13px', letterSpacing: '0.08em', marginBottom: '12px' }}>EMERGENCIAS</h4>
+            <div style={{ fontFamily: font.jost, color: 'rgba(255,255,255,0.7)', fontSize: '13px', lineHeight: 2 }}>
+              <div>Policía Nacional: <strong style={{ color: 'white' }}>123</strong></div>
+              <div>Línea de emergencia: <strong style={{ color: 'white' }}>112</strong></div>
+              <div>Denuncia: <strong style={{ color: 'white' }}>018000910600</strong></div>
+              <div>App: <strong style={{ color: '#C2D500' }}>MI POLICÍA</strong></div>
+            </div>
+          </div>
+        </div>
+        <div style={{ borderTop: '1px solid rgba(255,255,255,0.12)', marginTop: '32px', paddingTop: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+          <p style={{ fontFamily: font.jost, color: 'rgba(255,255,255,0.45)', fontSize: '12px' }}>
+            © 2024 Policía Nacional de Colombia · Departamento de Policía La Sabana
+          </p>
+          <p style={{ fontFamily: font.jost, color: 'rgba(255,255,255,0.35)', fontSize: '11px' }}>
+            E-TurismoSeguro · Todos los derechos reservados
+          </p>
+        </div>
+      </div>
+    </footer>
+  )
+}

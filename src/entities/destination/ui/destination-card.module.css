@@ -1,0 +1,18 @@
+/* Hover del prototipo (antes con estado de React): sombra, elevación y zoom de la foto. */
+.card {
+  transition: box-shadow 0.2s, transform 0.2s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.card:hover {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.image {
+  transition: transform 0.3s;
+}
+
+.card:hover .image {
+  transform: scale(1.04);
+}
