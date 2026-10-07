@@ -1,5 +1,5 @@
 // Destinos turísticos de la Regional Metropolitana de la Sabana.
-// Fuente: "SITIOS TURÍSTICOS DE LA REGIONAL METROPOLITANA DE LA SABANA.docx" (textos y fotos) y la tipificación
+// Fuente: "SITIOS TURÍSTICOS DEL DEPARTAMENTO DE LA SABANA.docx" (versión actualizada; textos y fotos) y la tipificación
 // entregada por el usuario. Solo se usan datos de esos documentos: donde no hay dirección u horario, el campo se omite.
 // Fotos optimizadas en public/destinos/<slug>/<n>.jpg.
 // Ubicaciones: OpenStreetMap (Nominatim/Overpass), revisadas a mano; las marcadas `approximate` deben verificarse.
@@ -445,6 +445,123 @@ const destinations: Destination[] = [
     images: photos('parque-natural-chicaque', 1),
     location: { lat: 4.59752, lon: -74.28270 },
     tips: natureTips,
+  },
+
+  // ── Gachancipá ─────────────────────────────────────────────────────────────
+  {
+    id: 'museo-campesino',
+    slug: 'museo-campesino',
+    name: 'Museo Campesino',
+    municipality: 'Gachancipá',
+    // Tipología propuesta (no venía en la tabla del usuario): pendiente de revisión
+    categories: ['Cultura', 'Gastronomía'],
+    description: 'Casa de barro y bahareque de unos 130 años con la tradición campesina, su huerta y recetas típicas.',
+    longDescription: 'Es una edificación de aproximadamente 130 años, cuyo barro y bahareque han sabido perdurar en el tiempo, igual que el conocimiento que guardan. Su colección de piezas emblemáticas de la tradición campesina está organizada en secciones: la cocina con fogón de tres piedras, el granero de semillas nativas y herramientas de labranza, una muestra de impresos religiosos y escritura del siglo XX, y un dormitorio tradicional en cuja con vestuario de los años cincuenta.\n\nLa huerta recupera y conserva semillas como el maíz amarillo, el yacón y la quinua, y se resaltan la gastronomía tradicional y los tejidos artesanales. En los recorridos se pueden probar productos típicos cultivados en la finca Jiménez, donde está el museo, preparados con las recetas tradicionales de doña María Emilia, reconocida por su aporte al patrimonio del departamento.',
+    images: photos('museo-campesino', 1),
+    location: { lat: 4.9914, lon: -73.8722, approximate: 'centro de Gachancipá; no está en OpenStreetMap' },
+    tips: generalTips,
+  },
+  {
+    id: 'estacion-del-tren-de-gachancipa',
+    slug: 'estacion-del-tren-de-gachancipa',
+    name: 'Estación del Tren de Gachancipá',
+    municipality: 'Gachancipá',
+    // Tipología propuesta (no venía en la tabla del usuario): pendiente de revisión
+    categories: ['Patrimonio'],
+    description: 'Estación de 1925 de estilo inglés con visos republicanos, Monumento Nacional desde 1982.',
+    longDescription: 'Se encuentra sobre la autopista, en el separador central de la vía, y pertenece al municipio de Gachancipá. Fue construida en 1925 por una compañía belga y conserva su delicado estilo arquitectónico inglés, con visos de republicanismo.\n\nEs un símbolo del auge de los ferrocarriles en Colombia a finales del siglo XIX y comienzos del XX, que también tuvo su esplendor en Gachancipá con el Ferrocarril del Nordeste. Fue declarada Monumento Nacional mediante la Resolución 02 de marzo de 1982.',
+    images: photos('estacion-del-tren-de-gachancipa', 1),
+    location: { lat: 4.99126, lon: -73.87425 },
+    tips: [route, 'Está en el separador central de la autopista: cruza solo por los pasos peatonales', emergency],
+  },
+
+  // ── Tenjo ──────────────────────────────────────────────────────────────────
+  {
+    id: 'mirador-las-cuevas',
+    slug: 'mirador-las-cuevas',
+    name: 'Mirador Las Cuevas',
+    municipality: 'Tenjo',
+    // Tipología propuesta (no venía en la tabla del usuario): pendiente de revisión
+    categories: ['Naturaleza', 'Aventura'],
+    description: 'Reserva ambiental con senderos interpretativos, formaciones naturales y un mirador sobre la Sabana.',
+    longDescription: 'Las Cuevas son uno de los principales atractivos naturales de Tenjo y forman parte de una zona de reserva ambiental protegida por la Corporación Autónoma Regional de Cundinamarca. Ofrecen senderos interpretativos para conocer formaciones naturales, vegetación nativa y paisajes característicos de la Sabana.\n\nEl área también tiene relevancia histórica, pues fue transitada por comunidades indígenas muiscas. La visita se hace bajo criterios de conservación y educación ambiental, lo que la convierte en una experiencia ideal para los amantes del ecoturismo y las caminatas.',
+    images: photos('mirador-las-cuevas', 1),
+    location: { lat: 4.8717, lon: -74.1442, approximate: 'centro de Tenjo; no está en OpenStreetMap' },
+    tips: natureTips,
+  },
+  {
+    id: 'museo-de-ovnilogia-y-cultura-ancestral',
+    slug: 'museo-de-ovnilogia-y-cultura-ancestral',
+    name: 'Museo de Ovnilogía y Cultura Ancestral',
+    municipality: 'Tenjo',
+    // Tipología propuesta (no venía en la tabla del usuario): pendiente de revisión
+    categories: ['Cultura'],
+    description: 'Museo inspirado en la tradición mística de Tenjo y la Peña de Juaica, entre la historia muisca y el misterio.',
+    longDescription: 'Es uno de los atractivos más singulares de Tenjo. Su propuesta se inspira en la tradición mística del municipio y en la cercanía con la Peña de Juaica, lugar sagrado para los muiscas y asociado desde el siglo XX a relatos de avistamientos de fenómenos anómalos no identificados. El museo combina historia ancestral, cosmovisión indígena y relatos contemporáneos.\n\nA través de exposiciones y objetos simbólicos, el visitante puede reflexionar sobre la relación entre el ser humano, el territorio y el universo. Es un espacio ideal para quienes buscan turismo alternativo, espiritual y cultural.',
+    images: photos('museo-de-ovnilogia-y-cultura-ancestral', 1),
+    location: { lat: 4.8717, lon: -74.1442, approximate: 'centro de Tenjo; no está en OpenStreetMap' },
+    tips: generalTips,
+  },
+
+  // ── Cota ───────────────────────────────────────────────────────────────────
+  {
+    id: 'bioparque-la-reserva',
+    slug: 'bioparque-la-reserva',
+    name: 'Bioparque La Reserva',
+    municipality: 'Cota',
+    // Tipología propuesta (no venía en la tabla del usuario): pendiente de revisión
+    categories: ['Naturaleza', 'Familiar'],
+    description: 'Recorrido guiado por ecosistemas colombianos con fauna silvestre rescatada del tráfico ilegal.',
+    longDescription: 'Es una fundación sin ánimo de lucro que contribuye a la conservación de la fauna silvestre colombiana, la flora y los recursos naturales mediante proyectos de educación ambiental e investigación sobre la biodiversidad.\n\nEn un recorrido guiado por los diferentes ecosistemas colombianos, los visitantes conocen especies silvestres rescatadas del tráfico ilegal.',
+    images: photos('bioparque-la-reserva', 1),
+    location: { lat: 4.80807, lon: -74.11712 },
+    tips: [route, 'No alimentes ni toques a los animales y sigue las indicaciones del guía', emergency],
+  },
+
+  // ── El Rosal ───────────────────────────────────────────────────────────────
+  {
+    id: 'monasterio-benedictino-de-san-benito',
+    slug: 'monasterio-benedictino-de-san-benito',
+    name: 'Monasterio Benedictino de San Benito',
+    municipality: 'El Rosal',
+    // Tipología propuesta (no venía en la tabla del usuario): pendiente de revisión
+    categories: ['Patrimonio', 'Cultura'],
+    description: 'Monasterio benedictino fundado en 1961, vinculado a los Misioneros de Santa Otilia.',
+    longDescription: 'El Monasterio Benedictino de San Benito, conocido históricamente por su vínculo con la orden de los Misioneros de Santa Otilia, fue fundado formalmente el 16 de enero de 1961.\n\nSu origen se remonta a la expansión de la congregación benedictina en Sudamérica, que había establecido un monasterio en Caracas (Venezuela) en 1923. Debido a la escasez de vocaciones en el país vecino, varios monjes fueron enviados a Colombia en 1959 para consolidar la comunidad.',
+    images: photos('monasterio-benedictino-de-san-benito', 1),
+    location: { lat: 4.86392, lon: -74.26501 },
+    tips: [route, 'Es un lugar de oración: guarda silencio y respeta los horarios de la comunidad', emergency],
+  },
+
+  // ── Zipacón ────────────────────────────────────────────────────────────────
+  {
+    id: 'caminos-reales-de-zipacon',
+    slug: 'caminos-reales-de-zipacon',
+    name: 'Caminos Reales de Zipacón',
+    municipality: 'Zipacón',
+    // Tipología propuesta (no venía en la tabla del usuario): pendiente de revisión
+    categories: ['Patrimonio', 'Naturaleza'],
+    description: 'Caminos empedrados que conectaron el altiplano con el valle del Magdalena desde 1539.',
+    longDescription: 'Zipacón es un boquete natural entre la Sabana y los valles cálidos del Magdalena. Por aquí transitaron los primeros conquistadores en 1539, las mulas cargadas de carbón del siglo XIX y, más tarde, el Ferrocarril de Girardot.\n\nHoy los caminos empedrados siguen ahí, como testimonio de la ruta que conectó el altiplano con el Magdalena.',
+    images: photos('caminos-reales-de-zipacon', 1),
+    location: { lat: 4.75024, lon: -74.38686, approximate: 'uno de los tramos del Camino Real en OpenStreetMap (vereda Rincón Santo)' },
+    tips: natureTips,
+  },
+
+  // ── Funza ──────────────────────────────────────────────────────────────────
+  {
+    id: 'parroquia-santiago-apostol',
+    slug: 'parroquia-santiago-apostol',
+    name: 'Parroquia Santiago Apóstol',
+    municipality: 'Funza',
+    // Tipología propuesta (no venía en la tabla del usuario): pendiente de revisión
+    categories: ['Patrimonio', 'Cultura'],
+    description: 'Parroquia principal de Funza, fundada en 1600; el templo actual, de 1886, es Bien de Interés Cultural del municipio.',
+    longDescription: 'Ubicada en pleno corazón del centro histórico, es la parroquia principal de Funza, fundada en el año 1600. El templo actual fue construido en 1886 sobre la antigua parroquia. Su arquitectura colonial le da una gran importancia histórica y es considerada Bien de Interés Cultural del municipio por ser una de sus construcciones más antiguas.\n\nFunza tiene otros escenarios religiosos, como iglesias, capillas y conventos, que vale la pena conocer por su historia, su arte y su labor con la comunidad. Una de las manifestaciones culturales y religiosas más importantes del municipio es la Semana Santa, que convoca a peregrinos de diferentes regiones.',
+    images: photos('parroquia-santiago-apostol', 1),
+    location: { lat: 4.71632, lon: -74.21222, approximate: 'Parque Principal de Funza (la iglesia no está en OpenStreetMap)' },
+    address: 'Av. 13 No. 13-56, Funza',
+    tips: generalTips,
   },
 ]
 

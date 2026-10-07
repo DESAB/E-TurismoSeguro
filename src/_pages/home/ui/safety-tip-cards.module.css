@@ -1,0 +1,38 @@
+/* Versión oscura de la tarjeta estándar (.ui-card): misma forma y mismo comportamiento al pasar el mouse */
+.card {
+  display: block;
+  height: 100%;
+  padding: 16px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: border-color 0.2s, background 0.2s, transform 0.2s;
+}
+@media (min-width: 768px) {
+  .card {
+    padding: 24px;
+  }
+}
+.card:hover,
+.card:focus-visible {
+  border-color: rgba(186, 255, 0, 0.6);
+  background: rgba(255, 255, 255, 0.09);
+  transform: translateY(-2px);
+}
+
+.icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #BAFF00;
+  background: rgba(186, 255, 0, 0.12);
+  transition: background 0.2s, color 0.2s;
+}
+.card:hover .icon,
+.card:focus-visible .icon {
+  background: #BAFF00;
+  color: #142749;
+}

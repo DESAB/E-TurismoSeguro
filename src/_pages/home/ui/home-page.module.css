@@ -16,32 +16,58 @@
   border-color: rgba(255, 255, 255, 0.9);
 }
 
-/* Tarjeta de categoría: --cat-color y --cat-bg vienen inline */
-.category {
-  background: white;
-  border: 2px solid #E5E5E5;
-  box-shadow: none;
-  transition: all 0.2s;
+/* Hero. Móvil: foto completa (4:3) bajo el encabezado fijo, fundida con el azul, y el texto debajo.
+   Desde lg: la foto ocupa la parte derecha del hero (~62 %) y se funde con el azul con un degradado ancho;
+   así se siente como fondo y el texto, a la izquierda, no tapa a ningún policía. */
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding-top: 64px;
 }
-.category:hover {
-  background: var(--cat-color);
-  border-color: var(--cat-color);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+.heroMedia {
+  position: relative;
+  aspect-ratio: 4 / 3;
 }
-
-.categoryIcon {
-  background-color: var(--cat-bg);
-  color: var(--cat-color);
-  transition: all 0.2s;
+.heroShade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(20, 39, 73, 0) 55%, #142749 100%);
 }
-.category:hover .categoryIcon {
-  background-color: rgba(255, 255, 255, 0.2);
-  color: white;
+.heroContent {
+  position: relative;
+  padding: 8px 0 44px;
 }
-
-.categoryLabel {
-  color: #233530;
+@media (min-width: 1024px) {
+  .hero {
+    height: 520px;
+    padding-top: 0;
+  }
+  .heroMedia {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 62%;
+    aspect-ratio: auto;
+  }
+  .heroShade {
+    background:
+      linear-gradient(to right, #142749 0%, rgba(20, 39, 73, 0.55) 14%, rgba(20, 39, 73, 0) 34%),
+      linear-gradient(to top, rgba(20, 39, 73, 0.35) 0%, rgba(20, 39, 73, 0) 30%);
+  }
+  .heroContent {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    padding: 0;
+  }
+  .heroText {
+    max-width: 480px;
+  }
 }
-.category:hover .categoryLabel {
-  color: white;
+@media (min-width: 1280px) {
+  .hero {
+    height: 580px;
+  }
 }

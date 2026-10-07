@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { barlowCondensed, jost } from '@/_app/styles/fonts'
+import { inter } from '@/_app/styles/fonts'
 import { site } from '@/shared/config'
 import '@/_app/styles/globals.css'
 
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
-    <html lang="es-CO" className={`${jost.variable} ${barlowCondensed.variable}`}>
+    <html lang="es-CO" className={inter.variable}>
       <body>{children}</body>
     </html>
   )

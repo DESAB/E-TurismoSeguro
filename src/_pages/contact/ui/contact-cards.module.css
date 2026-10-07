@@ -1,0 +1,31 @@
+/* Fila del recuadro de datos: se resalta al pasar el mouse y su ícono se rellena (como .ui-card-link) */
+.row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 20px;
+  transition: background 0.2s;
+}
+.row:hover {
+  background: #F7FAF8;
+}
+.rowIcon {
+  width: 36px;
+  height: 36px;
+}
+.row:hover .rowIcon {
+  background: #007934;
+  color: white;
+}
+
+.channel {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+}
+/* Canal sin enlace (CICRI): también rellena el ícono al pasar el mouse */
+.channel:hover :global(.ui-icon-circle) {
+  background: #007934;
+  color: white;
+}

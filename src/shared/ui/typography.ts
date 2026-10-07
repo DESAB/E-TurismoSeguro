@@ -1,7 +1,8 @@
-// Familias tipográficas del prototipo. Las variables las define next/font en src/_app/styles/fonts.ts.
-// Usar siempre estas constantes en estilos inline: next/font renombra las fuentes, así que
-// 'Jost' o 'Barlow Condensed' como texto literal no funcionan.
+// Tipografía del sitio: Inter en todo (la variable la define next/font en src/_app/styles/fonts.ts).
+// Usar siempre estas constantes en estilos inline: next/font renombra la fuente, así que
+// 'Inter' como texto literal no funciona. `heading` y `body` hoy son la misma familia;
+// se mantienen separadas por si los títulos cambian de fuente más adelante.
 export const font = {
-  jost: 'var(--font-jost), sans-serif',
-  barlow: 'var(--font-barlow), sans-serif',
+  heading: 'var(--font-inter), "Helvetica", "Arial", sans-serif',
+  body: 'var(--font-inter), "Helvetica", "Arial", sans-serif',
 } as const

@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { NavigationTracker } from '@/shared/ui'
 import { Footer } from './Footer'
 import { Header } from './Header'
 
@@ -6,6 +7,7 @@ import { Header } from './Header'
 export function SiteLayout({ children }: { children: ReactNode }) {
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <NavigationTracker />
       <Header />
       <main style={{ flex: 1 }}>{children}</main>
       <Footer />

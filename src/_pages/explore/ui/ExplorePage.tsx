@@ -8,8 +8,8 @@ import { ExploreResults, ExploreView } from './ExploreResults'
 
 // Canonical sin filtros: /explorar?categoria=… no compite con /explorar en los buscadores.
 export const metadata = pageMetadata({
-  title: 'Explora destinos de la Sabana de Bogotá',
-  description: 'Busca lugares turísticos de la Sabana de Bogotá por categoría (naturaleza, patrimonio, cultura, gastronomía, familiar, aventura) o por municipio.',
+  title: 'Explora destinos del Departamento de Policía La Sabana',
+  description: 'Busca lugares turísticos del Departamento de Policía La Sabana por categoría (naturaleza, patrimonio, cultura, gastronomía, familiar, aventura) o por municipio.',
   path: routes.explore,
 })
 
@@ -20,11 +20,11 @@ export function ExplorePage() {
   return (
     <div>
       {/* Page header */}
-      <div className="pt-20 pb-7 md:pb-10" style={{ backgroundColor: '#007934' }}>
+      <div className="pt-20 pb-7 md:pb-10" style={{ backgroundColor: '#142749' }}>
         <div className="max-w-7xl mx-auto px-6">
           <Breadcrumb items={[{ label: 'Inicio', href: routes.home }, { label: 'Explorar' }]} />
-          <h1 className="text-[34px] md:text-[48px]" style={{ fontFamily: font.barlow, fontWeight: 700, color: 'white', marginTop: '16px', marginBottom: '8px' }}>Explora la Sabana</h1>
-          <p style={{ fontFamily: font.jost, color: 'rgba(255,255,255,0.75)', fontSize: '16px' }}>Encuentra lugares según tus intereses o municipio</p>
+          <h1 className="text-[34px] md:text-[48px]" style={{ fontFamily: font.heading, fontWeight: 700, color: 'white', marginTop: '16px', marginBottom: '8px' }}>Explora la Sabana</h1>
+          <p style={{ fontFamily: font.body, color: 'rgba(255,255,255,0.75)', fontSize: '16px' }}>Encuentra lugares según tus intereses o municipio</p>
         </div>
       </div>
 

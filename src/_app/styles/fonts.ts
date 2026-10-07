@@ -1,13 +1,8 @@
-import { Barlow_Condensed, Jost } from 'next/font/google'
+import { Inter } from 'next/font/google'
 
-export const jost = Jost({
-  variable: '--font-jost',
+// Tipografía única del sitio (guía de diseño institucional): Inter.
+export const inter = Inter({
+  variable: '--font-inter',
   subsets: ['latin'],
   weight: ['300', '400', '500', '600', '700', '800'],
-})
-
-export const barlowCondensed = Barlow_Condensed({
-  variable: '--font-barlow',
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
 })

@@ -17,7 +17,7 @@ export function DestinationGallery({ name, images }: { name: string; images: str
             key={i}
             onClick={() => { setLightboxOpen(true); setLightboxIndex(i) }}
             aria-label={`Ampliar fotografía ${i + 1} de ${name}`}
-            style={{ position: 'relative', borderRadius: '8px', overflow: 'hidden', aspectRatio: '4/3', backgroundColor: '#e8f0e8' }}
+            style={{ position: 'relative', borderRadius: '12px', overflow: 'hidden', aspectRatio: '4/3', backgroundColor: '#e8f0e8' }}
           >
             <Image
               src={imgId}

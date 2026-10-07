@@ -1,0 +1,80 @@
+/* Recomendaciones de Seguridad. Móvil: 2 columnas compactas (ícono arriba del título).
+   Desde md: ícono al lado del título y más aire; lg: 3 columnas. El aspecto viene de .ui-card. */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+  }
+}
+
+.card {
+  padding: 14px;
+}
+.head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.title {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: #142749;
+}
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.item {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: #333;
+}
+.check {
+  flex-shrink: 0;
+  margin-top: 1px;
+  width: 14px;
+  height: 14px;
+}
+
+@media (min-width: 768px) {
+  .card {
+    padding: 22px;
+  }
+  .head {
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .title {
+    font-size: 18px;
+  }
+  .list {
+    gap: 10px;
+  }
+  .item {
+    gap: 10px;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+  .check {
+    width: 17px;
+    height: 17px;
+    margin-top: 2px;
+  }
+}

@@ -1,16 +1,15 @@
 @import "tailwindcss";
 
-/* Paleta y tipografías del prototipo de Figma Make (E-TurismoPrototype/src/index.css) */
+/* Paleta institucional de la Policía Nacional (Pantone 356C, 2769C, 389C y complementarios) y tipografía Inter */
 @theme inline {
   --color-brand-primary: #007934;
   --color-brand-dark: #006937;
-  --color-brand-accent: #C2D500;
-  --color-brand-green2: #61A60E;
+  --color-brand-accent: #BAFF00;
+  --color-brand-green2: #135657;
   --color-brand-gray: #C8C8C8;
-  --color-brand-gray-dark: #76777A;
-  --color-brand-deep: #233530;
-  --font-jost: var(--font-jost), "Helvetica", "Arial", sans-serif;
-  --font-barlow: var(--font-barlow), "Helvetica", "Arial", sans-serif;
+  --color-brand-gray-dark: #4B5563;
+  --color-brand-deep: #142749;
+  --font-sans: var(--font-inter), "Helvetica", "Arial", sans-serif;
 }
 
 * {
@@ -21,8 +20,13 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Títulos en Inter: un poco más apretados se leen mejor en tamaños grandes */
+h1, h2, h3 {
+  letter-spacing: -0.02em;
+}
+
 body {
-  font-family: var(--font-jost), "Helvetica", "Arial", sans-serif;
+  font-family: var(--font-inter), "Helvetica", "Arial", sans-serif;
   background-color: #FFFFFF;
   color: #333333;
   -webkit-font-smoothing: antialiased;
@@ -39,5 +43,49 @@ body {
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #76777A;
+  background: #4B5563;
+}
+
+/* Tarjeta estándar del sitio (guía de diseño): blanca, borde neutro, esquinas de 12px.
+   .ui-card-link para las que se pueden tocar: borde verde, sombra suave y leve elevación al pasar el mouse.
+   .ui-card-img: la foto de la tarjeta hace un zoom suave. No poner border/borderRadius inline en estas tarjetas. */
+.ui-card {
+  background: white;
+  border: 1px solid #E8EEF2;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.ui-card-link {
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+.ui-card-link:hover,
+.ui-card-link:focus-visible {
+  border-color: #007934;
+  box-shadow: 0 8px 24px rgba(20, 39, 73, 0.08);
+  transform: translateY(-2px);
+}
+.ui-card-img {
+  transition: transform 0.3s;
+}
+.ui-card-link:hover .ui-card-img {
+  transform: scale(1.04);
+}
+
+/* Círculo de ícono (verde claro con ícono verde); en tarjetas tocables se rellena al pasar el mouse */
+.ui-icon-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #007934;
+  background: #E9F5EE;
+  transition: background 0.2s, color 0.2s;
+}
+.ui-card-link:hover .ui-icon-circle,
+.ui-card-link:focus-visible .ui-icon-circle {
+  background: #007934;
+  color: white;
 }

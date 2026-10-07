@@ -39,7 +39,7 @@ export function ExploreView({ destinations, municipalities, value, onChange }: E
       {/* Search + botón de filtros (móvil) */}
       <div className="flex gap-2 mb-4 md:mb-6" style={{ maxWidth: '560px' }}>
         <div style={{ position: 'relative', flex: 1 }}>
-          <Search size={17} color="#76777A" strokeWidth={2} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)' }} />
+          <Search size={17} color="#4B5563" strokeWidth={2} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)' }} />
           <input
             value={search}
             onChange={e => set({ search: e.target.value })}
@@ -47,7 +47,7 @@ export function ExploreView({ destinations, municipalities, value, onChange }: E
             placeholder="¿Qué lugar quieres conocer?"
             aria-label="Buscar destino"
             className={styles.search}
-            style={{ width: '100%', padding: '12px 14px 12px 42px', borderRadius: '8px', fontFamily: font.jost, fontSize: '14px', color: '#333', outline: 'none' }}
+            style={{ width: '100%', padding: '12px 14px 12px 42px', borderRadius: '8px', fontFamily: font.body, fontSize: '14px', color: '#333', outline: 'none' }}
           />
         </div>
         <button
@@ -57,9 +57,9 @@ export function ExploreView({ destinations, municipalities, value, onChange }: E
           aria-controls="explore-filters"
           className="md:hidden flex items-center gap-2 shrink-0"
           style={{
-            fontFamily: font.jost, fontSize: '14px', fontWeight: 600, padding: '0 14px', borderRadius: '8px',
-            border: '1.5px solid', borderColor: filtersOpen || activeCount > 0 ? '#007934' : '#E5E5E5',
-            backgroundColor: filtersOpen ? '#007934' : 'white', color: filtersOpen ? 'white' : '#233530',
+            fontFamily: font.body, fontSize: '14px', fontWeight: 600, padding: '0 14px', borderRadius: '8px',
+            border: '1.5px solid', borderColor: filtersOpen || activeCount > 0 ? '#007934' : '#E8EEF2',
+            backgroundColor: filtersOpen ? '#007934' : 'white', color: filtersOpen ? 'white' : '#142749',
           }}
         >
           <SlidersHorizontal size={16} strokeWidth={2} />
@@ -74,7 +74,7 @@ export function ExploreView({ destinations, municipalities, value, onChange }: E
 
       <div id="explore-filters" className={filtersOpen ? 'block' : 'hidden md:block'}>
       {/* Category filters */}
-      <div className="md:hidden" style={{ fontFamily: font.jost, fontSize: '12px', fontWeight: 600, color: '#76777A', letterSpacing: '0.06em', marginBottom: '8px' }}>CATEGORÍA</div>
+      <div className="md:hidden" style={{ fontFamily: font.body, fontSize: '12px', fontWeight: 600, color: '#4B5563', letterSpacing: '0.06em', marginBottom: '8px' }}>CATEGORÍA</div>
       <div className="flex flex-wrap gap-2 mb-4">
         {filters.map(f => (
           <button
@@ -82,13 +82,13 @@ export function ExploreView({ destinations, municipalities, value, onChange }: E
             onClick={() => set({ category: f })}
             aria-pressed={activeFilter === f}
             style={{
-              fontFamily: font.jost,
+              fontFamily: font.body,
               fontSize: '13px',
               fontWeight: activeFilter === f ? 600 : 400,
               padding: '8px 16px',
               borderRadius: '100px',
               border: '1.5px solid',
-              borderColor: activeFilter === f ? '#007934' : '#E5E5E5',
+              borderColor: activeFilter === f ? '#007934' : '#E8EEF2',
               backgroundColor: activeFilter === f ? '#007934' : 'white',
               color: activeFilter === f ? 'white' : '#333',
               transition: 'all 0.15s',
@@ -101,12 +101,12 @@ export function ExploreView({ destinations, municipalities, value, onChange }: E
 
       {/* Municipality filter: en móvil un selector (22 botones llenarían la pantalla) */}
       <label className="md:hidden block mb-4">
-        <span style={{ display: 'block', fontFamily: font.jost, fontSize: '12px', fontWeight: 600, color: '#76777A', letterSpacing: '0.06em', marginBottom: '8px' }}>MUNICIPIO</span>
+        <span style={{ display: 'block', fontFamily: font.body, fontSize: '12px', fontWeight: 600, color: '#4B5563', letterSpacing: '0.06em', marginBottom: '8px' }}>MUNICIPIO</span>
         <select
           value={activeMunicipality}
           onChange={e => set({ municipality: e.target.value })}
           disabled={!onChange}
-          style={{ width: '100%', padding: '11px 12px', border: '1.5px solid', borderColor: activeMunicipality !== ALL ? '#61A60E' : '#E5E5E5', borderRadius: '8px', fontFamily: font.jost, fontSize: '14px', color: '#333', backgroundColor: 'white' }}
+          style={{ width: '100%', padding: '11px 12px', border: '1.5px solid', borderColor: activeMunicipality !== ALL ? '#135657' : '#E8EEF2', borderRadius: '8px', fontFamily: font.body, fontSize: '14px', color: '#333', backgroundColor: 'white' }}
         >
           <option value={ALL}>Todos los municipios</option>
           {municipalities.map(m => {
@@ -119,7 +119,7 @@ export function ExploreView({ destinations, municipalities, value, onChange }: E
         type="button"
         onClick={() => setFiltersOpen(false)}
         className="md:hidden w-full mb-6"
-        style={{ padding: '12px', backgroundColor: '#007934', color: 'white', borderRadius: '8px', fontFamily: font.jost, fontWeight: 600, fontSize: '14px' }}
+        style={{ padding: '12px', backgroundColor: '#007934', color: 'white', borderRadius: '8px', fontFamily: font.body, fontWeight: 600, fontSize: '14px' }}
       >
         Ver {resultsLabel}
       </button>
@@ -131,15 +131,15 @@ export function ExploreView({ destinations, municipalities, value, onChange }: E
             onClick={() => set({ municipality: m })}
             aria-pressed={activeMunicipality === m}
             style={{
-              fontFamily: font.jost,
+              fontFamily: font.body,
               fontSize: '12px',
               fontWeight: 500,
               padding: '7px 12px',
               borderRadius: '4px',
               border: '1px solid',
-              borderColor: activeMunicipality === m ? '#61A60E' : '#E5E5E5',
-              backgroundColor: activeMunicipality === m ? '#61A60E' : '#F7F7F5',
-              color: activeMunicipality === m ? 'white' : '#76777A',
+              borderColor: activeMunicipality === m ? '#135657' : '#E8EEF2',
+              backgroundColor: activeMunicipality === m ? '#135657' : '#F7F7F5',
+              color: activeMunicipality === m ? 'white' : '#4B5563',
             }}
           >
             {m}
@@ -149,7 +149,7 @@ export function ExploreView({ destinations, municipalities, value, onChange }: E
       </div>
 
       {/* Results count + filtros aplicados (con los filtros plegados, recuerdan qué se está viendo) */}
-      <div className="flex flex-wrap items-center gap-2" style={{ fontFamily: font.jost, fontSize: '13px', color: '#76777A', marginBottom: '24px' }}>
+      <div className="flex flex-wrap items-center gap-2" style={{ fontFamily: font.body, fontSize: '13px', color: '#4B5563', marginBottom: '24px' }}>
         <span aria-live="polite">{resultsLabel} encontrado{filtered.length !== 1 ? 's' : ''}</span>
         {appliedChips.map(chip => (
           <button
@@ -179,11 +179,11 @@ export function ExploreView({ destinations, municipalities, value, onChange }: E
       {filtered.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '80px 0' }}>
           <div style={{ fontSize: '48px', marginBottom: '16px' }}>🗺️</div>
-          <h3 style={{ fontFamily: font.barlow, fontSize: '28px', fontWeight: 600, color: '#233530', marginBottom: '8px' }}>No encontramos destinos</h3>
-          <p style={{ fontFamily: font.jost, color: '#76777A', marginBottom: '24px' }}>Prueba con otra categoría, municipio o término de búsqueda.</p>
+          <h3 style={{ fontFamily: font.heading, fontSize: '28px', fontWeight: 600, color: '#142749', marginBottom: '8px' }}>No encontramos destinos</h3>
+          <p style={{ fontFamily: font.body, color: '#4B5563', marginBottom: '24px' }}>Prueba con otra categoría, municipio o término de búsqueda.</p>
           <button
             onClick={() => set(defaultFilters)}
-            style={{ fontFamily: font.jost, fontWeight: 600, fontSize: '13px', color: '#007934', border: '1.5px solid #007934', padding: '8px 20px', borderRadius: '6px' }}
+            style={{ fontFamily: font.body, fontWeight: 600, fontSize: '13px', color: '#007934', border: '1.5px solid #007934', padding: '8px 20px', borderRadius: '6px' }}
           >
             Limpiar filtros
           </button>

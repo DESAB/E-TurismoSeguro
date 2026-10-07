@@ -11,7 +11,7 @@ import { font } from '@/shared/ui'
 const MAP_STYLE = 'https://tiles.openfreemap.org/styles/positron'
 const SOURCE = 'destinos'
 
-const COLORS = { primary: '#007934', accent: '#C2D500', deep: '#233530' }
+const COLORS = { primary: '#007934', accent: '#BAFF00', deep: '#142749' }
 
 const LOCALE_ES = {
   'NavigationControl.ZoomIn': 'Acercar',
@@ -169,7 +169,7 @@ export function SabanaMap({ destinations, fallbackCenter, selectedId, onSelect }
       {/* MapLibre controla el contenido de este div: no poner hijos de React dentro */}
       <div ref={containerRef} role="region" aria-label="Mapa de destinos turísticos de la Sabana" style={{ position: 'absolute', inset: 0 }} />
       {!ready && (
-        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: font.jost, fontSize: '13px', color: '#76777A', pointerEvents: 'none' }}>
+        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: font.body, fontSize: '13px', color: '#4B5563', pointerEvents: 'none' }}>
           Cargando mapa…
         </div>
       )}

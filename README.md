@@ -1,6 +1,6 @@
 # E-TurismoSeguro
 
-Guía turística digital de la Sabana de Bogotá — Departamento de Policía La Sabana.
+Guía turística digital del Departamento de Policía La Sabana (Policía Nacional de Colombia).
 
 Next.js (App Router) desplegado en **Cloudflare Workers** con [OpenNext](https://opennext.js.org/cloudflare).
 El diseño replica el prototipo de Figma Make (`E-TurismoPrototype`).

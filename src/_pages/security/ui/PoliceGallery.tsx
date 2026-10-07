@@ -15,7 +15,7 @@ export function PoliceGallery({ photos }: { photos: PolicePhoto[] }) {
         {photos.map((photo, i) => (
           <li key={photo.src}>
             <button type="button" onClick={() => setOpenIndex(i)} className="block w-full text-left group" aria-label={`Ampliar: ${photo.caption}`}>
-              <div style={{ position: 'relative', aspectRatio: '4/3', borderRadius: '8px', overflow: 'hidden', backgroundColor: '#e8f0e8' }}>
+              <div style={{ position: 'relative', aspectRatio: '4/3', borderRadius: '12px', overflow: 'hidden', backgroundColor: '#e8f0e8' }}>
                 <Image
                   src={photo.src}
                   alt={photo.caption}
@@ -25,7 +25,7 @@ export function PoliceGallery({ photos }: { photos: PolicePhoto[] }) {
                   style={{ objectFit: 'cover' }}
                 />
               </div>
-              <p style={{ fontFamily: font.jost, fontSize: '12px', color: '#76777A', lineHeight: 1.45, marginTop: '8px' }}>{photo.caption}</p>
+              <p style={{ fontFamily: font.body, fontSize: '12px', color: '#4B5563', lineHeight: 1.45, marginTop: '8px' }}>{photo.caption}</p>
             </button>
           </li>
         ))}

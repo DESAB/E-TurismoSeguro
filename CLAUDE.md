@@ -18,11 +18,28 @@ No rediseñar ni "mejorar" por cuenta propia.
   `CategoryBadge` (417), `DestinationCard` (435), `HomePage` (476), `ExplorePage` (706),
   `MapPage` (824), `DestinationPage` (1020), `SecurityPage` (1208), `VideosPage` (1283),
   `ContactPage` (1345), `AdminPage` (1431), datos iniciales y `App` (2012).
-- Paleta y fuentes: `D:\E-TurismoPrototype\src\index.css` (ya portadas a `src/_app/styles/globals.css`).
+- Fuentes: `D:\E-TurismoPrototype\src\index.css` (portadas a `src/_app/styles/globals.css`).
+- **Colores: paleta institucional de la Policía Nacional** (entregada por el cliente; reemplaza la del prototipo):
+  primarios `#007934` (356C), `#142749` (2769C, azul oscuro), `#BAFF00` (389C, solo sobre fondos oscuros o verdes);
+  complementarios `#135657`, `#134159`, `#132753`, `#56AF89`, `#A8D42E`, `#E1E640`, `#FFE82C`.
+  Nota: el manual dice "HTML 007954" para el 356C, pero su RGB (0,121,52) es `#007934`.
+- **Nombre del territorio:** "Departamento de Policía La Sabana", nunca "Sabana de Bogotá" (pedido del cliente).
 - Para verlo: `pnpm dev` en esa carpeta → http://localhost:8443.
 
-Fuentes: vienen de `next/font` con nombres internos. En estilos inline usar `font.jost` / `font.barlow`
-de `@/shared/ui`, o las clases `font-jost` / `font-barlow`. Nunca el nombre literal ('Jost', 'Barlow Condensed').
+**Guía de diseño institucional (reemplaza al prototipo en colores, tipografía y componentes):**
+- **Tipografía: Inter** en todo (`next/font`, variable `--font-inter`). En estilos inline usar `font.heading` /
+  `font.body` de `@/shared/ui` (hoy ambas son Inter). Nunca el nombre literal. Escala: H1 48 · H2 32 · H3 24 · P 16 · small 14.
+- **Papel de cada color:** azul `#142749` = estructura (header, footer, bandas de título, secciones y recuadros oscuros)
+  y títulos; verde `#007934` = acciones (botón principal, íconos, enlaces); lima `#BAFF00` = acentos **solo sobre azul
+  o verde** (menú activo como línea, cifras, etiquetas); amarillo `#FFE82C` = **solo** el botón "Administrar"
+  (el usuario no lo quiere en otros botones: los llamados a la acción van en verde); texto secundario `#4B5563`; bordes `#E8EEF2`.
+- **Botones sin flechas** (decisión del usuario).
+- **Tarjetas: todas iguales** con las clases globales de `globals.css`: `.ui-card` (blanca, borde `#E8EEF2`, radio 12),
+  `.ui-card-link` (tocables: borde verde, sombra y elevación al hover), `.ui-card-img` (zoom de la foto) y
+  `.ui-icon-circle` (ícono verde en círculo verde claro; se rellena al hover). No poner border/borderRadius inline en ellas.
+  Fotos sueltas y recuadros oscuros también con radio 12.
+- **Íconos animados:** `morphicons` (`MorphIcon` de `morphicons/react`) con datos del paquete `lucide` (misma versión
+  que `lucide-react`). Se usa en las tarjetas de categoría del inicio (`_pages/home/ui/CategoryCards.tsx`).
 
 ## Arquitectura: Feature-Sliced Design (FSD v2.1)
 
@@ -122,12 +139,19 @@ direcciones ni datos; si un campo no está, se omite (el diseño ya oculta horar
   Virreyes, balcones, Plaza de la Independencia y Plaza de los Mártires). Chicaque va en **Bojacá** (decisión del usuario).
   6 sitios con **tipología propuesta** (comentario en el código): Estación del Tren, Casa Museo Quevedo, Plaza
   Villaveces, Parque La Esmeralda, Iglesia San Francisco de Asís y Catedral del Rosario → el usuario debe confirmarla.
+- **Actualización (2026-10-06):** nuevo Word `SITIOS TURÍSTICOS DEL DEPARTAMENTO DE LA SABANA.docx` (mismos sitios + 9 nuevos).
+  Agregados los 8 (38 destinos): Estación del Tren y Museo Campesino (Gachancipá), Mirador Las Cuevas y Museo de Ovnilogía
+  (Tenjo), Bioparque La Reserva (Cota), Monasterio Benedictino de San Benito (El Rosal), Caminos Reales de Zipacón y
+  Parroquia Santiago Apóstol (Funza); tipología propuesta. Las fotos del Word del Museo Campesino y de Funza traían marca de
+  agua (Dreamstime): se usaron fotos que mandó el usuario. El texto de El Rosal traía "Conversación en el Modo IA…": se quitó.
+  Fotos de baja resolución: Bioparque La Reserva (474 px) y Parroquia Santiago Apóstol (678 px). Municipio sin destinos: Cajicá.
+  Museo Campesino es el primer sitio de Gastronomía.
 - **Retirados mientras se verifican "uno a uno":** Lagunas de Siecha y Parque y Templo de Chía (redirección 302 a
   Explorar filtrado). Renombrados con 301: laguna-de-neusa → embalse-del-neusa, mina-de-sal-nemocon → mina-de-sal-de-nemocon.
 - **33 estaciones/subestaciones/CAI** (`police-stations.ts`): se muestran en la ficha de cada destino ("Policía en
   <municipio>", con `tel:`). El Word trae más que el Excel (p. ej. Subestación Neusa, 4 CAI de Facatativá).
 - **Videos:** los 2 reales de YouTube del Word (Zipaquirá, Termales El Zipa); enlazan a YouTube; sin duración.
-- **Fotos:** hero del inicio = Cerro El Tablazo; teaser del mapa = Piedras de Chivonegro; fondo del mapa = Embalse del Neusa.
+- **Fotos:** hero del inicio = foto del equipo de Policía de Turismo (`public/policia/equipo-de-turismo.jpg`, mitad derecha en escritorio, debajo del texto en móvil); teaser del mapa = Piedras de Chivonegro; fondo del mapa = Embalse del Neusa.
   Baja resolución (se ven borrosas en grande): Chingaza (300 px), Pionono (358 px), una de Centro Histórico (471 px).
 - **Mapa real e interactivo** (aprobado por el usuario): `_pages/map/ui/SabanaMap.tsx` con **MapLibre GL 5** y el
   estilo `positron` de **OpenFreeMap** (teselas vectoriales de OSM, gratis, sin clave). MapLibre se importa dinámicamente,
@@ -141,7 +165,6 @@ direcciones ni datos; si un campo no está, se omite (el diseño ya oculta horar
   límite Subachoque-Supatá). **Aproximadas, a verificar con la Policía:** Sendero de los Zipas, Casa Museo Quevedo
   Zornoza (por dirección) y Parque La Esmeralda (barrio).
 - **Admin:** adaptado con un formato interno (portada + categoría principal) que se convierte al modelo al cargar/guardar.
-- Categoría **Gastronomía** sin sitios: muestra el estado vacío (no se tocó el diseño).
 - Verificado: build (42 páginas), lint, tipos, flujos interactivos y Workers (OpenNext + populateCache + wrangler dev).
 
 ### ✅ Fase 3 — SEO e imágenes (hecha, sin commit)

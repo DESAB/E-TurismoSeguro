@@ -12,7 +12,7 @@ const colors: Record<string, { bg: string; text: string }> = {
 export function CategoryBadge({ category }: { category: string }) {
   const c = colors[category] || { bg: '#f1f1ef', text: '#333' }
   return (
-    <span style={{ backgroundColor: c.bg, color: c.text, fontFamily: font.jost, fontSize: '12px', fontWeight: 600, padding: '2px 8px', borderRadius: '4px', letterSpacing: '0.04em' }}>
+    <span style={{ backgroundColor: c.bg, color: c.text, fontFamily: font.body, fontSize: '12px', fontWeight: 600, padding: '2px 8px', borderRadius: '4px', letterSpacing: '0.04em' }}>
       {category.toUpperCase()}
     </span>
   )

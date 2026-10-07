@@ -64,7 +64,7 @@ export function Lightbox({ photos, index, onIndexChange, onClose, label }: Light
           style={{ maxWidth: '90vw', maxHeight: photo.caption ? '78vh' : '85vh', width: 'auto', height: 'auto', objectFit: 'contain', borderRadius: '4px' }}
         />
         {photo.caption && (
-          <figcaption style={{ maxWidth: '80vw', textAlign: 'center', color: 'rgba(255,255,255,0.85)', fontFamily: font.jost, fontSize: '14px' }}>{photo.caption}</figcaption>
+          <figcaption style={{ maxWidth: '80vw', textAlign: 'center', color: 'rgba(255,255,255,0.85)', fontFamily: font.body, fontSize: '14px' }}>{photo.caption}</figcaption>
         )}
       </figure>
       <button
@@ -72,7 +72,7 @@ export function Lightbox({ photos, index, onIndexChange, onClose, label }: Light
         style={{ position: 'absolute', right: '20px', color: 'white', fontSize: '32px', background: 'none' }}
         onClick={e => { e.stopPropagation(); next() }}
       >›</button>
-      <div style={{ position: 'absolute', bottom: '20px', left: '50%', transform: 'translateX(-50%)', color: 'rgba(255,255,255,0.6)', fontFamily: font.jost, fontSize: '13px' }}>
+      <div style={{ position: 'absolute', bottom: '20px', left: '50%', transform: 'translateX(-50%)', color: 'rgba(255,255,255,0.6)', fontFamily: font.body, fontSize: '13px' }}>
         {index + 1} / {photos.length}
       </div>
     </div>

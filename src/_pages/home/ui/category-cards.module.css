@@ -1,0 +1,8 @@
+/* Distribución interna de la tarjeta de categoría (el aspecto viene de .ui-card / .ui-card-link en globals.css) */
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  height: 100%;
+  padding: 20px;
+}
