@@ -21,7 +21,7 @@ export function Footer() {
             <div className="flex items-center gap-3 mb-4">
               <PoliceShield size={56} />
               <div>
-                <div style={{ fontFamily: font.body, fontWeight: 700, color: '#BAFF00', fontSize: '15px' }}>E-TurismoSeguro</div>
+                <div style={{ fontFamily: font.body, fontWeight: 700, color: '#BAFF00', fontSize: '15px' }}>Estrategia Turismo Seguro</div>
                 <div style={{ fontFamily: font.body, color: 'rgba(255,255,255,0.7)', fontSize: '12px' }}>Departamento de Policía La Sabana</div>
               </div>
             </div>
@@ -53,7 +53,7 @@ export function Footer() {
             © {new Date().getFullYear()} Policía Nacional de Colombia · Departamento de Policía La Sabana
           </p>
           <p style={{ fontFamily: font.body, color: 'rgba(255,255,255,0.35)', fontSize: '12px' }}>
-            E-TurismoSeguro · Todos los derechos reservados
+            Estrategia Turismo Seguro · Todos los derechos reservados
           </p>
         </div>
       </div>

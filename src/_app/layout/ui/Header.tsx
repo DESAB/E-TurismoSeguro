@@ -50,7 +50,7 @@ export function Header() {
           <PoliceShield size={52} />
           <div className="text-left">
             <div style={{ fontFamily: font.body, fontWeight: 700, fontSize: '13px', color: '#BAFF00', letterSpacing: '0.08em', lineHeight: 1 }}>
-              E-TurismoSeguro
+              Estrategia Turismo Seguro
             </div>
             <div style={{ fontFamily: font.body, fontWeight: 400, fontSize: '12px', color: 'rgba(255,255,255,0.75)', letterSpacing: '0.04em', lineHeight: 1.2, marginTop: 2 }}>
               Departamento de Policía La Sabana
