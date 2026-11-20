@@ -1,4 +1,4 @@
-import { Earth, Globe, Mail, MailOpen, MapPin, MapPinCheck, Phone, PhoneCall, ScanSearch, Search, Shield, ShieldCheck } from 'lucide'
+import { Earth, Globe, Mail, MailOpen, MapPin, MapPinCheck, Phone, PhoneCall, Shield, ShieldCheck } from 'lucide'
 
 // Datos de Contacto. Íconos como datos de `lucide` (serializables): el de reposo y el que aparece al pasar el mouse.
 type IconData = typeof Phone

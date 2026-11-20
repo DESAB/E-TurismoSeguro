@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { site } from '../config/site'
 
 interface PageSeo {
-  /** Título de la página (el layout le añade "· E-TurismoSeguro") */
+  /** Título de la página (el layout le añade "· Estrategia Turismo Seguro") */
   title: string
   description: string
   /** Ruta canónica, p. ej. '/explorar' */

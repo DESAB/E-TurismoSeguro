@@ -2,9 +2,9 @@
 // NEXT_PUBLIC_SITE_URL debe apuntar al dominio público (sin barra final) en el build de Cloudflare;
 // se usa en canonical, Open Graph, sitemap.xml y robots.txt.
 export const site = {
-  name: 'E-TurismoSeguro',
+  name: 'Estrategia Turismo Seguro',
   url: (process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000').replace(/\/$/, ''),
-  title: 'E-TurismoSeguro · Guía turística del Departamento de Policía La Sabana',
+  title: 'Estrategia Turismo Seguro · Guía turística del Departamento de Policía La Sabana',
   description:
     'Descubre de manera segura los municipios del Departamento de Policía La Sabana: destinos, patrimonio, naturaleza y recomendaciones de la Policía Nacional.',
   locale: 'es_CO',

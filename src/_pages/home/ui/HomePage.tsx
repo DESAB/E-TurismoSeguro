@@ -13,7 +13,7 @@ import styles from './home-page.module.css'
 
 export const metadata = {
   ...pageMetadata({ title: site.title, description: site.description, path: routes.home, imageAlt: 'Grupo de Protección al Turismo y Patrimonio Nacional del Departamento de Policía La Sabana' }),
-  // El título del inicio no lleva el sufijo "· E-TurismoSeguro" del layout
+  // El título del inicio no lleva el sufijo "· Estrategia Turismo Seguro" del layout
   title: { absolute: site.title },
 }
 

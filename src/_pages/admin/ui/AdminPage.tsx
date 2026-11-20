@@ -145,7 +145,7 @@ export function AdminPage({
         <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
           <Image src={policeShieldImage} alt="Policía Nacional" width={32} height={32} style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
           <div>
-            <span style={{ fontFamily: font.heading, fontWeight: 700, fontSize: '16px', color: '#BAFF00', letterSpacing: '0.04em' }}>E-TurismoSeguro</span>
+            <span style={{ fontFamily: font.heading, fontWeight: 700, fontSize: '16px', color: '#BAFF00', letterSpacing: '0.04em' }}>Estrategia Turismo Seguro</span>
             <span style={{ fontFamily: font.body, fontSize: '11px', color: 'rgba(255,255,255,0.45)', marginLeft: '10px' }}>Panel de administración</span>
           </div>
         </div>
